@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(uuid())
+  username       String   @unique
+  password       String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  createdOrders  Order[]  @relation("CreatedBy")
+  editedOrders   Order[]  @relation("LastEditedBy")
+}
+
+model Order {
+  id             String   @id @default(uuid())
+  cakeType       String
+  photo          String?
+  date           DateTime
+  time           String  
+  notes          String?
+  price          Decimal
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  createdBy      User     @relation("CreatedBy", fields: [createdById], references: [id])
+  createdById    String  
+  lastEditedBy   User?    @relation("LastEditedBy", fields: [lastEditedById], references: [id])
+  lastEditedById String? 
+}
