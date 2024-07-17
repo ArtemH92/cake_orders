@@ -1,13 +1,5 @@
 <template>
-  <main class="h-screen bg-slate-600 flex items-center justify-center">
+  <a-layout class="flex justify-center items-center min-h-screen p-4 bg-emerald-800">
     <router-view />
-  </main>
-</template>
-
-<script setup lang="ts">
-
-</script>
-
-<style scoped>
-
-</style>  
+  </a-layout> 
+</template>w
