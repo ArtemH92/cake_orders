@@ -1,86 +1,71 @@
-<script setup lang="ts">
-import { reactive, computed } from 'vue'
-import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
-
-interface UserRegister {
-  username: string
-  password: string
-  confirm: string
-}
-
-const formStateUser = reactive<UserRegister>({
-  username: '',
-  password: '',
-  confirm: ''
-})
-
-const onFinish = (values: any) => {
-  console.log('Success:', values)
-}
-
-const onFinishFailed = (errorInfo: any) => {
-  console.log('Failed:', errorInfo)
-}
-
-const disabled = computed(() => {
-  return !(formStateUser.username && formStateUser.password)
-})
-</script>
-
 <template>
-  <a-card>
-    <a-typography-title :level="2" class="text-center">Авторизация</a-typography-title>
+  <a-card class="w-full max-w-[500px] sm:max-w-[375px] md:max-w-[500px]">
+    <a-typography-title class="text-center !text-[clamp(2rem,0.8rem+2vw,2.5rem)]">
+      Регистрация
+    </a-typography-title>
     <a-form
-      :model="formStateUser"
+      ref="formRef"
       name="login_form"
-      class="login-form mt-8"
-      labelAlign="left"
       autocomplete="off"
-      @finish="onFinish"
-      @finishFailed="onFinishFailed"
+      class="mt-8"
+      :model="formState"
+      :rules="rules"
+      v-bind="LayoutLogin"
+      @finish="handleFinish"
+      @validate="handleValidate"
+      @finishFailed="handleFinishFailed"
     >
-      <a-form-item
-        label="Имя пользователя"
-        name="username"
-        :rules="[{ required: true, message: 'Введите имя пользователя!' }]"
-      >
-        <a-input v-model:value="formStateUser.username">
-          <template #prefix>
-            <UserOutlined class="site-form-item-icon" />
-          </template>
-        </a-input>
+      <a-form-item label="Имя пользователя" name="username">
+        <a-input v-model:value="formState.username" type="text" />
       </a-form-item>
 
-      <a-form-item
-        label="Пароль"
-        name="password"
-        :rules="[{ required: true, message: 'Введите пароль!' }]"
-      >
-        <a-input-password v-model:value="formStateUser.password">
-          <template #prefix>
-            <LockOutlined class="site-form-item-icon" />
-          </template>
-        </a-input-password>
+      <a-form-item label="Пароль" name="password">
+        <a-input-password v-model:value="formState.password" />
       </a-form-item>
 
-      <a-form-item
-        label="Подтвердите"
-        name="password"
-        :rules="[{ required: true, message: 'Введите пароль!' }]"
-      >
-        <a-input-password v-model:value="formStateUser.confirm">
-          <template #prefix>
-            <LockOutlined class="site-form-item-icon" />
-          </template>
-        </a-input-password>
+      <a-form-item label="Подтвердите пароль" name="confirmPassword">
+        <a-input-password v-model:value="formState.confirmPassword"  />
       </a-form-item>
 
       <a-form-item class="flex justify-center">
-        <a-button :disabled="disabled" type="primary" html-type="submit"> Зарегистрироваться </a-button>
+        <a-button type="primary" html-type="submit">Зарегистрироваться</a-button>
       </a-form-item>
-      <a-typography class="text-center"
-        >Есть аккаунт? <router-link to="/Login">Войти</router-link></a-typography
-      >
+
+      <a-typography class="text-center">
+        Уже есть аккаунт? <router-link to="/login">Войти</router-link>
+      </a-typography>
+
     </a-form>
   </a-card>
 </template>
+<script lang="ts" setup>
+import { reactive, ref, computed } from 'vue'
+import type { FormInstance } from 'ant-design-vue'
+import { LayoutLogin } from './settings/configLoginForm'
+import { RulesRegister } from './settings/configLoginForm';
+
+interface UserFormState {
+  username: string
+  password: string
+  confirmPassword: string
+}
+const formRef = ref<FormInstance>()
+const formState = reactive<UserFormState>({
+  username: '',
+  password: '',
+  confirmPassword: ''
+})
+
+const handleFinish = (values: UserFormState) => {
+  console.log(values, formState)
+}
+const handleFinishFailed = (errors: any) => {
+  console.log(errors)
+}
+
+const handleValidate = (...args: any) => {
+  console.log(args)
+}
+
+const rules = computed(() => RulesRegister(formState.password));
+</script>
