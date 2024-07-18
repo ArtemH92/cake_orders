@@ -20,13 +20,8 @@ const formState = reactive<UserFormState>({
 
 const { login } = useAuthStore()
 
-const handleFinish = async (values: UserFormState) => {
-  try {
-    await login(values);
-    router.push('/')
-  } catch(err) {
-    console.log(err)
-  }
+const handleFinish = (values: UserFormState) => {
+  login(values).then(() => router.push('/'))
 }
 
 const handleFinishFailed = (errors: any) => {
