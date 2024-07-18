@@ -11,7 +11,7 @@ const all = async (req, res) => {
 
     res.status(200).json(orders);
   } catch {
-    res.status(500).json({ message: "Не удалось получить заказ" });
+    res.status(500).json({ message: "Не удалось получить заказы" });
   }
 };
 

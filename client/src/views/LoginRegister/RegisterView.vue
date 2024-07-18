@@ -3,6 +3,8 @@ import { reactive, ref, computed } from 'vue'
 import type { FormInstance } from 'ant-design-vue'
 import { LayoutLogin } from './settings/config'
 import { RulesRegister } from './settings/config';
+import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router';
 
 interface UserFormState {
   username: string
@@ -16,8 +18,12 @@ const formState = reactive<UserFormState>({
   confirmPassword: ''
 })
 
+const router = useRouter()
+
+const { register } = useAuthStore()
+
 const handleFinish = (values: UserFormState) => {
-  console.log(values, formState)
+  register({username: values.username, password: values.password}).then(() => router.push('/'))
 }
 const handleFinishFailed = (errors: any) => {
   console.log(errors)

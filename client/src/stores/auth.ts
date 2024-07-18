@@ -39,15 +39,24 @@ export const useAuthStore = defineStore('auth', {
         this.error = error.message;
       }
     },
+    async remove(id: string) {
+      try {
+        await api.post<ResponseLoginData>(`/users/remove/${id}`);
+      } catch (error) {
+        this.error = error.message;
+      }
+    },
     async currentUser() {
       try {
         const { data } = await api.get<ResponseLoginData>('/users/current');
         this.user = data;
         this.token = data.token;
         this.error = null;
+        return this.user.username
       } catch (error) {
         this.error = error.message;
       }
+      
     },
     logout() {
       localStorage.removeItem('token');
