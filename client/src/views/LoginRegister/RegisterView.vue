@@ -1,3 +1,36 @@
+<script lang="ts" setup>
+import { reactive, ref, computed } from 'vue'
+import type { FormInstance } from 'ant-design-vue'
+import { LayoutLogin } from './settings/config'
+import { RulesRegister } from './settings/config';
+
+interface UserFormState {
+  username: string
+  password: string
+  confirmPassword: string
+}
+const formRef = ref<FormInstance>()
+const formState = reactive<UserFormState>({
+  username: '',
+  password: '',
+  confirmPassword: ''
+})
+
+const handleFinish = (values: UserFormState) => {
+  console.log(values, formState)
+}
+const handleFinishFailed = (errors: any) => {
+  console.log(errors)
+}
+
+const handleValidate = (...args: any) => {
+  console.log(args)
+}
+
+const rules = computed(() => RulesRegister(formState.password));
+</script>
+
+
 <template>
   <a-card class="w-full max-w-[500px] sm:max-w-[375px] md:max-w-[500px]">
     <a-typography-title class="text-center !text-[clamp(2rem,0.8rem+2vw,2.5rem)]">
@@ -38,34 +71,3 @@
     </a-form>
   </a-card>
 </template>
-<script lang="ts" setup>
-import { reactive, ref, computed } from 'vue'
-import type { FormInstance } from 'ant-design-vue'
-import { LayoutLogin } from './settings/configLoginForm'
-import { RulesRegister } from './settings/configLoginForm';
-
-interface UserFormState {
-  username: string
-  password: string
-  confirmPassword: string
-}
-const formRef = ref<FormInstance>()
-const formState = reactive<UserFormState>({
-  username: '',
-  password: '',
-  confirmPassword: ''
-})
-
-const handleFinish = (values: UserFormState) => {
-  console.log(values, formState)
-}
-const handleFinishFailed = (errors: any) => {
-  console.log(errors)
-}
-
-const handleValidate = (...args: any) => {
-  console.log(args)
-}
-
-const rules = computed(() => RulesRegister(formState.password));
-</script>
