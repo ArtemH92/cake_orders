@@ -41,4 +41,14 @@ const router = createRouter({
   ]
 })
 
+router.beforeEach((to, from, next) => {
+  if (to.meta.auth && !localStorage.getItem('token')) {
+    next('/login')
+  } else if (!to.meta.auth && localStorage.getItem('token')) {
+    next('/')
+  } else {
+    next()
+  }
+})
+
 export default router
