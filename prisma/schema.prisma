@@ -22,7 +22,10 @@ model User {
 
 model Order {
   id             String   @id @default(uuid())
-  cakeType       String
+  dessert        String
+  cakeType       String?
+  cupcakesType   String?
+  filling        String?
   photo          String?
   date           DateTime
   time           String  
