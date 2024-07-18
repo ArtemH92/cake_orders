@@ -1,8 +1,9 @@
 <script setup lang="ts">
+
 </script>
 
 <template>
-  <main>
-    Homepage
-  </main>
+  <a-space>
+    Hello
+  </a-space>
 </template>
