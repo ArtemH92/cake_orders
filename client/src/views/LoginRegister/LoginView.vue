@@ -2,27 +2,37 @@
 import { reactive, ref } from 'vue'
 import type { FormInstance } from 'ant-design-vue'
 import { RulesLogin, LayoutLogin } from './settings/config'
+import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
 
 interface UserFormState {
   username: string
   password: string
 }
+
 const formRef = ref<FormInstance>()
 const formState = reactive<UserFormState>({
   username: '',
   password: ''
 })
 
-const handleFinish = (values: UserFormState) => {
-  console.log(values, formState, 'success')
+const { login } = useAuthStore()
+
+const handleFinish = async (values: UserFormState) => {
+  try {
+    await login(values);
+    router.push('/')
+  } catch(err) {
+    console.log(err)
+  }
 }
+
 const handleFinishFailed = (errors: any) => {
   console.log(errors)
 }
 
-const handleValidate = (...args: any) => {
-  console.log(args)
-}
 </script>
 
 <template>
@@ -38,8 +48,7 @@ const handleValidate = (...args: any) => {
       :model="formState"
       :rules="RulesLogin"
       v-bind="LayoutLogin"
-      @finish="handleFinish"
-      @validate="handleValidate"
+      @finish="handleFinish(formState)"
       @finishFailed="handleFinishFailed"
     >
       <a-form-item label="Имя пользователя" name="username">

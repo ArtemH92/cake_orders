@@ -2,18 +2,14 @@ import { defineStore } from 'pinia';
 import api from '@/api';
 
 interface User {
-  id: string
   username: string
   password: string
-  createdAt: string
-  updatedAt: string
-  createdOrders: string
-  editedOrders: string
 }
 
 interface ResponseLoginData extends User {
   token: string;
 }
+
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -24,18 +20,17 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async login(userData: User) {
       try {
-        const { data } = await api.post<ResponseLoginData>('/user/login', userData);
+        const { data } = await api.post<ResponseLoginData>('/users/login', userData);
         localStorage.setItem('token', data.token);
         this.user = data;
         this.token = data.token;
-        this.error = null;
       } catch (error) {
         this.error = error.message;
       }
     },
     async register(userData: User) {
       try {
-        const { data } = await api.post<ResponseLoginData>('/user/register', userData);
+        const { data } = await api.post<ResponseLoginData>('/users/register', userData);
         localStorage.setItem('token', data.token);
         this.user = data;
         this.token = data.token;
@@ -46,7 +41,7 @@ export const useAuthStore = defineStore('auth', {
     },
     async currentUser() {
       try {
-        const { data } = await api.get<ResponseLoginData>('/user/current');
+        const { data } = await api.get<ResponseLoginData>('/users/current');
         this.user = data;
         this.token = data.token;
         this.error = null;
