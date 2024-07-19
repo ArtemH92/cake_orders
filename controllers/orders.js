@@ -24,7 +24,7 @@ const add = async (req, res) => {
   try {
     const data = req.body;
 
-    if (!data.dessert || !data.date || !data.time) {
+    if (!data.dessert || !data.date || !data.time || !data.price) {
       return res.status(400).json({ message: "Все поля обязательные" });
     }
 
@@ -37,7 +37,8 @@ const add = async (req, res) => {
 
     return res.status(201).json(order);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.log(err);
+    res.status(500).json({ message: "Что-то пошло не так" });
   }
 };
 
@@ -101,7 +102,7 @@ const order = async (req, res) => {
     });
 
     res.status(200).json(order);
-  } catch(err) {
+  } catch {
     res.status(500).json({ message: "Не удалось получить заказ" });
   }
 };

@@ -1,6 +1,5 @@
-import { defineStore } from 'pinia'
-import { ref, reactive } from 'vue'
-import api from '@/api'
+import { defineStore } from 'pinia';
+import api from '@/api';
 
 interface User {
   username: string
@@ -8,46 +7,61 @@ interface User {
 }
 
 interface ResponseLoginData extends User {
-  token: string
+  token: string;
 }
-export const useAuthStore = defineStore('auth', () => {
-  let user = reactive({})
-  const token = ref<null | string>(null)
-  const error = ref<null | string>(null)
 
-  const login = async (userData: User) => {
-    try {
-      const { data } = await api.post<ResponseLoginData>('/users/login', userData)
-      localStorage.setItem('token', data.token)
-      user = data
-      token.value = data.token
-    } catch (err) {
-      error.value = err.message
-    }
-  }
 
-  const register = async (userData: User) => {
-    try {
-      const { data } = await api.post<ResponseLoginData>('/users/register', userData)
-      localStorage.setItem('token', data.token)
-      user.value = data
-      token.value = data.token
-      error.value = null
-    } catch (err) {
-      error.value = err.message
-    }
-  }
-
-  const currentUser = async () => {
-    await api.get<ResponseLoginData>('/users/current').then((response) => {
-      user.value = response.data
-    })
-  }
-
-  const logout = () => {
-    localStorage.removeItem('token')
-    user.value = null
-    token.value = null
-  }
-  return { user, login, register, currentUser, logout }
-})
+export const useAuthStore = defineStore('auth', {
+  state: () => ({
+    user: null as User | null,
+    token: null as string | null,
+    error: null as string | null,
+  }),
+  actions: {
+    async login(userData: User) {
+      try {
+        const { data } = await api.post<ResponseLoginData>('/users/login', userData);
+        localStorage.setItem('token', data.token);
+        this.user = data;
+        this.token = data.token;
+      } catch (error) {
+        this.error = error.message;
+      }
+    },
+    async register(userData: User) {
+      try {
+        const { data } = await api.post<ResponseLoginData>('/users/register', userData);
+        localStorage.setItem('token', data.token);
+        this.user = data;
+        this.token = data.token;
+        this.error = null;
+      } catch (error) {
+        this.error = error.message;
+      }
+    },
+    async remove(id: string) {
+      try {
+        await api.post<ResponseLoginData>(`/users/remove/${id}`);
+      } catch (error) {
+        this.error = error.message;
+      }
+    },
+    async currentUser() {
+      try {
+        const { data } = await api.get<ResponseLoginData>('/users/current');
+        this.user = data;
+        this.token = data.token;
+        this.error = null;
+        return this.user.username
+      } catch (error) {
+        this.error = error.message;
+      }
+      
+    },
+    logout() {
+      localStorage.removeItem('token');
+      this.user = null;
+      this.token = null;
+    },
+  },
+});

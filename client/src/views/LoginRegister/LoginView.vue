@@ -1,19 +1,26 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { LoginForm } from '@/models/models';
-import type { LoginUserFormState } from '@/models/types';
+import { reactive, ref } from 'vue'
 import type { FormInstance } from 'ant-design-vue'
-import { RulesLogin, LayoutLogin } from '@/lib/formConfig'
+import { RulesLogin, LayoutLogin } from './settings/config'
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
 
+interface UserFormState {
+  username: string
+  password: string
+}
+
 const formRef = ref<FormInstance>()
+const formState = reactive<UserFormState>({
+  username: '',
+  password: ''
+})
 
 const { login } = useAuthStore()
 
-const handleFinish = (values: LoginUserFormState) => {
+const handleFinish = (values: UserFormState) => {
   login(values).then(() => router.push('/'))
 }
 
@@ -33,17 +40,17 @@ const handleFinishFailed = (errors: any) => {
       name="login_form"
       autocomplete="off"
       class="mt-8"
-      :model="LoginForm"
+      :model="formState"
       :rules="RulesLogin"
       v-bind="LayoutLogin"
-      @finish="handleFinish(LoginForm)"
+      @finish="handleFinish(formState)"
       @finishFailed="handleFinishFailed"
     >
       <a-form-item label="Имя пользователя" name="username">
-        <a-input v-model:value="LoginForm.username" type="text" />
+        <a-input v-model:value="formState.username" type="text" />
       </a-form-item>
       <a-form-item label="Пароль" name="password">
-        <a-input-password v-model:value="LoginForm.password" />
+        <a-input-password v-model:value="formState.password" />
       </a-form-item>
       <a-form-item class="flex justify-center">
         <a-button type="primary" html-type="submit">Войти</a-button>

@@ -7,7 +7,7 @@ export const validateUsername = async (_rule: Rule, value: string) => {
   return Promise.resolve(); 
 };
 
-export const requiredField = async (_rule: Rule, value: string) => {
+export const validatePass = async (_rule: Rule, value: string) => {
   if (value === '') {
     return Promise.reject('Введите пароль');
   }
