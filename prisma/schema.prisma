@@ -26,11 +26,11 @@ model Order {
   cakeType       String?
   cupcakesType   String?
   filling        String?
+  quantity       Decimal?
   photo          String?
   date           DateTime
   time           String  
   notes          String?
-  price          Decimal
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   createdBy      User     @relation("CreatedBy", fields: [createdById], references: [id])
