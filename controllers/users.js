@@ -91,27 +91,6 @@ const register = async (req, res, next) => {
 };
 
 /**
- * @route POST /api/orders/remove/:id
- * @desc Удаление заказа
- * @access Private
- */
-const remove = async (req, res) => {
-  const { id } = req.body;
-
-  try {
-    await prisma.user.delete({
-      where: {
-        id,
-      },
-    });
-
-    res.status(204).json("OK");
-  } catch {
-    res.status(500).json({ message: "Не удалось удалить заказ" });
-  }
-};
-
-/**
  * 
  * @route GET /api/user/current
  * @desc Текущий пользователь
@@ -125,6 +104,5 @@ const current = async (req, res) => {
 module.exports = {
   login,
   register,
-  remove,
   current,
 };

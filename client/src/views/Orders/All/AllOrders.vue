@@ -1,42 +1,43 @@
 <script lang="ts" setup>
-import HomeHeader from '@/components/HomeHeader.vue';
+import HomeHeader from '@/components/HomeHeader.vue'; 
+import { useOrderStore } from '@/stores/orders';
+import moment from 'moment'
+
+interface OrderDisplay {
+  id: string
+  dessert: string
+  date: string
+  time: string
+  notes: string
+}
+
+const { getAllOrders, orders } = useOrderStore()
+
+getAllOrders()
 
 const columns = [
   {
-    title: 'Name',
-    dataIndex: 'name',
+    title: 'Изделие',
+    key: 'dessert',
+    customRender: ({ record }: { record: OrderDisplay }) => {
+      const item = record.dessert === 'cake' ? 'Торт' : 'Капкейк';
+      return item;
+    },
   },
   {
-    title: 'Cash Assets',
-    className: 'column-money',
-    dataIndex: 'money',
+    title: 'Дата и время',
+    key: 'dateTime',
+    customRender: ({ record }: { record: OrderDisplay }) => {
+      const dateTime = moment(record.date).format('DD.MM.YYYY') + ' ' + record.time;
+      return dateTime;
+    },
   },
   {
-    title: 'Address',
-    dataIndex: 'address',
+    title: 'Примечание',
+    dataIndex: 'notes',
+    key: 'notes',
   },
-];
-
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    money: '￥300,000.00',
-    address: 'New York No. 1 Lake Park',
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    money: '￥1,256,000.00',
-    address: 'London No. 1 Lake Park',
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    money: '￥120,000.00',
-    address: 'Sidney No. 1 Lake Park',
-  },
-];
+]
 </script>
 
 <template>
@@ -44,18 +45,5 @@ const data = [
       :title="'Лист заказов'"
       :btn-text="'Добавить заказ'"
       :path="'/orders/add'" />
-  <a-table :columns="columns" :data-source="data" bordered>
-    <template #bodyCell="{ column, text }">
-      <template v-if="column.dataIndex === 'name'">
-        <a>{{ text }}</a>
-      </template>
-    </template>
-  </a-table>
+  <a-table :columns="columns" :data-source="orders" rowKey="id" bordered />
 </template>
-
-<style scoped>
-th.column-money,
-td.column-money {
-  text-align: right !important;
-}
-</style>

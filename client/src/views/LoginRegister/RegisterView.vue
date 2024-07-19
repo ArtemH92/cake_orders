@@ -1,41 +1,26 @@
 <script lang="ts" setup>
-import { reactive, ref, computed } from 'vue'
+import { ref, computed } from 'vue'
 import type { FormInstance } from 'ant-design-vue'
-import { LayoutLogin } from './settings/config'
-import { RulesRegister } from './settings/config';
+import { LayoutLogin, RulesRegister } from '@/lib/formConfig'
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
+import { RegisterForm } from '@/models/models';
+import type { RegisterUserFormState } from '@/models/types';
 
-interface UserFormState {
-  username: string
-  password: string
-  confirmPassword: string
-}
 const formRef = ref<FormInstance>()
-const formState = reactive<UserFormState>({
-  username: '',
-  password: '',
-  confirmPassword: ''
-})
-
 const router = useRouter()
 
 const { register } = useAuthStore()
 
-const handleFinish = (values: UserFormState) => {
+const handleFinish = (values: RegisterUserFormState) => {
   register({username: values.username, password: values.password}).then(() => router.push('/'))
 }
 const handleFinishFailed = (errors: any) => {
   console.log(errors)
 }
 
-const handleValidate = (...args: any) => {
-  console.log(args)
-}
-
-const rules = computed(() => RulesRegister(formState.password));
+const rules = computed(() => RulesRegister(RegisterForm.password));
 </script>
-
 
 <template>
   <a-card class="w-full max-w-[500px] sm:max-w-[375px] md:max-w-[500px]">
@@ -47,23 +32,22 @@ const rules = computed(() => RulesRegister(formState.password));
       name="login_form"
       autocomplete="off"
       class="mt-8"
-      :model="formState"
+      :model="RegisterForm"
       :rules="rules"
       v-bind="LayoutLogin"
       @finish="handleFinish"
-      @validate="handleValidate"
       @finishFailed="handleFinishFailed"
     >
       <a-form-item label="Имя пользователя" name="username">
-        <a-input v-model:value="formState.username" type="text" />
+        <a-input v-model:value="RegisterForm.username" type="text" />
       </a-form-item>
 
       <a-form-item label="Пароль" name="password">
-        <a-input-password v-model:value="formState.password" />
+        <a-input-password v-model:value="RegisterForm.password" />
       </a-form-item>
 
       <a-form-item label="Подтвердите пароль" name="confirmPassword">
-        <a-input-password v-model:value="formState.confirmPassword"  />
+        <a-input-password v-model:value="RegisterForm.confirmPassword"  />
       </a-form-item>
 
       <a-form-item class="flex justify-center">
