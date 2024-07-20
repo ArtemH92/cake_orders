@@ -18,3 +18,7 @@ export interface AddOrder {
   time : string
   notes: string
 }
+
+export interface Orders extends AddOrder {
+  id: string
+}

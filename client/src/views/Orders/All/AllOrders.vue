@@ -1,61 +1,91 @@
 <script lang="ts" setup>
-import HomeHeader from '@/components/HomeHeader.vue';
+import HomeHeader from '@/components/HomeHeader.vue'
+import { useOrderStore } from '@/stores/orders'
+import type { TableColumnType } from 'ant-design-vue'
+import moment from 'moment'
+import { useRouter } from 'vue-router'
+import { Modal } from 'ant-design-vue';
+import { ExclamationCircleOutlined  } from '@ant-design/icons-vue';
+import { h } from 'vue';
 
-const columns = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-  },
-  {
-    title: 'Cash Assets',
-    className: 'column-money',
-    dataIndex: 'money',
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-  },
-];
+interface DataItem {
+  id: string
+  dessert: string
+  date: string
+  time: string
+  notes: string
+}
 
-const data = [
+const showConfirm = (id: string) => {
+  Modal.confirm({
+    title: 'Вы уверены?',
+    icon: () => h(ExclamationCircleOutlined ),
+    onOk: () => removeOrder(id),
+    onCancel: () => router.push('/orders/list'),
+    class: 'test',
+  });
+}
+
+const router = useRouter()
+const { getAll, orders, removeOrder } = useOrderStore()
+
+getAll()
+
+const remove = (id: string) => {
+  showConfirm(id)
+}
+
+const columns: TableColumnType[] = [
   {
-    key: '1',
-    name: 'John Brown',
-    money: '￥300,000.00',
-    address: 'New York No. 1 Lake Park',
+    title: 'Изделие',
+    dataIndex: 'dessert',
+    customRender: ({ record }) => {
+      const dessert = record.dessert == 'cake' ? 'Торт' : 'Капкейк'
+      return dessert
+    }
   },
   {
-    key: '2',
-    name: 'Jim Green',
-    money: '￥1,256,000.00',
-    address: 'London No. 1 Lake Park',
+    title: 'Дата и время',
+    key: 'dateTime',
+    customRender: ({ record }: { record: DataItem }) => {
+      const date = moment(record.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+      const time = moment(new Date(record.time)).format('HH:mm')
+      return `${date} ${time}`
+    }
   },
   {
-    key: '3',
-    name: 'Joe Black',
-    money: '￥120,000.00',
-    address: 'Sidney No. 1 Lake Park',
+    title: 'Примечания',
+    dataIndex: 'notes',
+    key: 'notes'
   },
-];
+  {
+    title: 'Действие',
+    key: 'operation'
+  },
+]
 </script>
 
 <template>
-  <HomeHeader 
-      :title="'Лист заказов'"
-      :btn-text="'Добавить заказ'"
-      :path="'/orders/add'" />
-  <a-table :columns="columns" :data-source="data" bordered>
-    <template #bodyCell="{ column, text }">
-      <template v-if="column.dataIndex === 'name'">
-        <a>{{ text }}</a>
+  <HomeHeader :title="'Лист заказов'" :btn-text="'Добавить заказ'" :path="'/orders/add'" />
+  <div class="max-w-full overflow-x-auto">
+    <a-table
+      :columns="columns"
+      :data-source="orders"
+      :scroll="{ x: true }"
+      class="md:w-auto lg:w-full xl:w-full"
+    >
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'operation'">
+          <a-space :compact="true" :size="['small', 'middle']">
+            <a-button type="primary" @click="() => router.push(`/orders/edit/${record.id}`)">
+              Редактировать
+            </a-button>
+            <a-button danger @click="() => remove(record.id)">
+              Удалить
+            </a-button>
+          </a-space>
+        </template>
       </template>
-    </template>
-  </a-table>
+    </a-table>
+  </div>
 </template>
-
-<style scoped>
-th.column-money,
-td.column-money {
-  text-align: right !important;
-}
-</style>

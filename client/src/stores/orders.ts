@@ -4,16 +4,16 @@ import api from '@/api'
 import type { AddOrder } from '@/models/types'
 
 export const useOrderStore = defineStore('order', () => {
-  const orders = reactive<AddOrder[]>([])
+  const orders = reactive([])
   const order = reactive<{} | AddOrder>({})
   const error = ref<null | string>(null)
 
   const getAll = async () => {
     await api
-    .get('/orders')
-    .then((response) => {
-      Object.assign(orders, response.data)
-    }).catch((err) => error.value = err.message )
+      .get('/orders')
+      .then((response) => {
+        Object.assign(orders, response.data)
+      }).catch((err) => error.value = err.message )
   }
 
   const getOrder = async (id: string) => {

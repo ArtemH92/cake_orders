@@ -5,9 +5,24 @@ import { AddOrderDataState } from '@/models/models';
 import type { AddOrder } from '@/models/types';
 import { LayoutLogin } from '@/lib/formConfig';
 import { useOrderStore } from '@/stores/orders';
+import { Modal } from 'ant-design-vue';
+import { CheckCircleTwoTone } from '@ant-design/icons-vue';
+import { h } from 'vue';
+import { useRouter } from 'vue-router';
 
 const { dessert, cakeType, cupcakesType, filling } = Choices
 const { createOrder } = useOrderStore()
+const router = useRouter()
+
+const showConfirm = () => {
+  Modal.confirm({
+    title: 'Заказ успешно создан',
+    icon: () => h(CheckCircleTwoTone),
+    onOk: () => router.push('/orders/list'),
+    onCancel: () => router.push('/orders/list'),
+    class: 'test',
+  });
+}
 
 const ChangeHandler = () => {
   if(AddOrderDataState.dessert === 'cake') {
@@ -22,7 +37,7 @@ const ChangeHandler = () => {
 }
 
 const handleFinish = (data: AddOrder) => {
-  createOrder(data)
+  createOrder(data).then(() => showConfirm())
 }
 
 </script>
@@ -32,7 +47,7 @@ const handleFinish = (data: AddOrder) => {
     <HomeHeader 
       title="Создание заказа" 
       btnText="Вернуться к списку заказов" 
-      path="/orders" 
+      path="/orders/list" 
     />
     <a-card>
       <a-form 
@@ -93,8 +108,8 @@ const handleFinish = (data: AddOrder) => {
           <a-time-picker placeholder="" v-model:value="AddOrderDataState.time" format="HH:mm" />
         </a-form-item>
 
-        <a-form-item label="Примечания" v-model:value="AddOrderDataState.notes">
-          <a-textarea type="text" autoSize />
+        <a-form-item label="Примечания">
+          <a-textarea type="text" autoSize v-model:value="AddOrderDataState.notes" />
         </a-form-item>
 
         <a-form-item class="flex justify-center">
