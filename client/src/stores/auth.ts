@@ -1,6 +1,6 @@
-import { defineStore } from 'pinia';
-import { ref } from 'vue'
-import api from '@/api';
+import { defineStore } from 'pinia'
+import { reactive, ref } from 'vue'
+import api from '@/api'
 
 interface User {
   username: string
@@ -8,49 +8,57 @@ interface User {
 }
 
 interface ResponseLoginData extends User {
-  token: string;
+  token: string
 }
 
-export const useAuthStore =  defineStore('auth', () => {
-  const user = ref(null as User | null)
-  const token = ref(null as string | null)
-  const error = ref(null as string | null)
+export const useAuthStore = defineStore('auth', () => {
+  const user = reactive<{} | User>({})
+  const token = ref<null | string>(null)
+  const error = ref<null | string>(null)
 
-  const login = async (userData: User) =>{
-    await api.post<ResponseLoginData>('/users/login', userData).then((response) => {
-      localStorage.setItem('token', response.data.token)
-      user.value = response.data
-      token.value = response.data.token;
-    }).catch((err) => {
-      error.value = err.message;
-    })
+  const login = async (userData: User) => {
+    await api
+      .post<ResponseLoginData>('/users/login', userData)
+      .then((response) => {
+        localStorage.setItem('token', response.data.token);
+        Object.assign(user, response.data)
+        token.value = response.data.token
+      })
+      .catch((err) => {
+        error.value = err.message
+      })
   }
 
   const register = async (userData: User) => {
-    await api.post<ResponseLoginData>('/users/register', userData).then((response) => {
-      localStorage.setItem('token', response.data.token)
-      user.value = response.data
-      token.value = response.data.token;
-    }).catch((err) => {
-      error.value = err.message;
-    })
+    await api
+      .post<ResponseLoginData>('/users/register', userData)
+      .then((response) => {
+        localStorage.setItem('token', response.data.token);
+        Object.assign(user, response.data)
+        token.value = response.data.token
+        error.value = null
+      })
+      .catch((err) => {
+        error.value = err.message
+      })
   }
 
-  const currentUser = async() => {
-    await api.get<ResponseLoginData>('/users/current').then((response) => {
-      localStorage.setItem('token', response.data.token)
-      user.value = response.data
-      token.value = response.data.token;
-    }).catch((err) => {
-      error.value = err.message;
-    })
+  const currentUser = async () => {
+    await api
+      .get<ResponseLoginData>('/users/current')
+      .then((response) => {
+        Object.assign(user, response.data)
+      })
+      .catch((err) => {
+        error.value = err.message
+      })
   }
 
   const logout = () => {
-    localStorage.removeItem('token');
-      user.value = null;
-      token.value = null;
+    localStorage.removeItem('token')
+    Object.keys(user).forEach(key => delete user[key])
+    token.value = null
   }
 
-  return { user, login, register, currentUser, logout }
+  return { user, token, error, login, register, currentUser, logout }
 })
