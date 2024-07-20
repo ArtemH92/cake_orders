@@ -1,22 +1,18 @@
 import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue'
+import type { LoginFormState } from '@/models/types'
 import api from '@/api'
 
-interface User {
-  username: string
-  password: string
-}
-
-interface ResponseLoginData extends User {
+interface ResponseLoginData extends LoginFormState {
   token: string
 }
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = reactive<{} | User>({})
+  const user = reactive<{} | LoginFormState>({})
   const token = ref<null | string>(null)
   const error = ref<null | string>(null)
 
-  const login = async (userData: User) => {
+  const login = async (userData: LoginFormState) => {
     await api
       .post<ResponseLoginData>('/users/login', userData)
       .then((response) => {
@@ -29,7 +25,7 @@ export const useAuthStore = defineStore('auth', () => {
       })
   }
 
-  const register = async (userData: User) => {
+  const register = async (userData: LoginFormState) => {
     await api
       .post<ResponseLoginData>('/users/register', userData)
       .then((response) => {
