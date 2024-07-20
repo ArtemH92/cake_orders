@@ -4,8 +4,10 @@ import HomeHeader from '@/components/HomeHeader.vue'
 import { AddOrderDataState } from '@/models/models';
 import type { AddOrder } from '@/models/types';
 import { LayoutLogin } from '@/lib/formConfig';
+import { useOrderStore } from '@/stores/orders';
 
 const { dessert, cakeType, cupcakesType, filling } = Choices
+const { createOrder } = useOrderStore()
 
 const ChangeHandler = () => {
   if(AddOrderDataState.dessert === 'cake') {
@@ -20,7 +22,7 @@ const ChangeHandler = () => {
 }
 
 const handleFinish = (data: AddOrder) => {
-  console.log(data)
+  createOrder(data)
 }
 
 </script>
