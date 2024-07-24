@@ -48,7 +48,7 @@ const add = async (req, res) => {
  * @access Private
  */
 const remove = async (req, res) => {
-  const { id } = req.body;
+  const { id } = req.params;
 
   try {
     await prisma.order.delete({
@@ -58,8 +58,8 @@ const remove = async (req, res) => {
     });
 
     res.status(204).json("OK");
-  } catch {
-    res.status(500).json({ message: "Не удалось удалить заказ" });
+  } catch(err) {
+    res.status(500).json(err.message);
   }
 };
 
