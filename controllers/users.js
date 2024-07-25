@@ -91,11 +91,56 @@ const register = async (req, res, next) => {
 };
 
 /**
- * @route POST /api/orders/remove/:id
- * @desc Удаление заказа
+ * @route GET /api/users/:id
+ * @desc Пользователя заказа
  * @access Private
  */
-const remove = async (req, res) => {
+const getUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    res.status(200).json(user);
+  } catch {
+    res.status(500).json({ message: "Не удалось получить заказ" });
+  }
+};
+
+/**
+ * @route PUT /api/users/edit/:id
+ * @desc Редактирование пользователя
+ * @access Private
+ */
+
+const editUser = async (req, res) => {
+  const data = req.body;
+  const id = data.id;
+
+  try {
+    await prisma.user.update({
+      where: {
+        id,
+      },
+      data,
+    });
+
+    res.status(204).json("OK");
+  } catch(err) {
+    res.status(500).json({ message: "Не удалось редактировать заказ" });
+  }
+};
+
+/**
+ * @route POST /api/user/remove/:id
+ * @desc Удаление пользователя
+ * @access Private
+ */
+const removeUser = async (req, res) => {
   const { id } = req.body;
 
   try {
@@ -125,6 +170,8 @@ const current = async (req, res) => {
 module.exports = {
   login,
   register,
-  remove,
+  removeUser,
   current,
+  getUser,
+  editUser
 };

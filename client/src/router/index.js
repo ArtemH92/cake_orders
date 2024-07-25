@@ -14,8 +14,18 @@ const router = createRouter({
           component: () => import('../views/Orders/OrdersList.vue')
         }
       ]
-    },
+    }
   ]
 })
+
+// router.beforeEach((to, from, next) => {
+//   if (!localStorage.getItem('token')) {
+//     next('/login')
+//   } else if (localStorage.getItem('token')) {
+//     next('/')
+//   } else {
+//     next()
+//   }
+// })
 
 export default router

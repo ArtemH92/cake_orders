@@ -1,4 +1,4 @@
-const { login, register, current } = require('../controllers/users')
+const { login, register, current, removeUser, getUser, editUser } = require('../controllers/users')
 
 const express = require('express');
 const router = express.Router();
@@ -13,5 +13,14 @@ router.post('/register', register);
 
 /* /api/user/current */
 router.get('/current', auth, current);
+
+/* /api/user/current */
+router.get('/current/:id', auth, getUser);
+
+/* /api/user/remove */
+router.post('/remove/:id', auth, removeUser);
+
+/* /api/user/remove */
+router.put('/current/edit/:id', auth, editUser);
 
 module.exports = router;
