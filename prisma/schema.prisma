@@ -14,6 +14,8 @@ model User {
   id             String   @id @default(uuid())
   username       String   @unique
   password       String
+  administrator  Boolean @default(false)
+  phone          String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   createdOrders  Order[]  @relation("CreatedBy")
@@ -29,7 +31,8 @@ model Order {
   quantity       Decimal?
   photo          String?
   date           DateTime
-  time           String  
+  time           String 
+  status         String 
   notes          String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
