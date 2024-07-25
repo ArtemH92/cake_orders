@@ -4,10 +4,13 @@ import moment from 'moment';
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 import { UserOutlined, EditOutlined, UserAddOutlined, LogoutOutlined } from '@ant-design/icons-vue';
+import ModalWindow from './ModalWindow.vue';
+import CreateUser from './CreateUser.vue';
 
 
 const router = useRouter()
 const { logout, user, getUser } = useAuthStore()
+let openModal = ref(false)
 
 getUser()
 
@@ -29,6 +32,8 @@ onUnmounted(() => {
   clearInterval(timer);
 });
 
+
+
 </script>
 
 <template>
@@ -41,7 +46,7 @@ onUnmounted(() => {
         <a-button type="primary" :icon="h(UserOutlined)" class="flex items-center justify-center" />
         <template #overlay>
           <a-menu>
-            <a-menu-item v-if="user?.administrator">
+            <a-menu-item v-if="user?.administrator" @click="openModal = true">
               <span class="flex justify-start items-center">
                 <UserAddOutlined class="pr-2" /> Добавить нового пользователя
               </span>
@@ -59,6 +64,9 @@ onUnmounted(() => {
           </a-menu>
         </template>
       </a-dropdown>
+      <ModalWindow v-if="openModal" :is-active="openModal">
+        <CreateUser @close-modal="openModal = false" />
+      </ModalWindow>
     </div>
   </a-layout-header>
 </template>
