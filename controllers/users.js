@@ -121,6 +121,10 @@ const editUser = async (req, res) => {
   const data = req.body;
   const id = data.id;
 
+  if (!id) {
+    return res.status(400).json({ message: "ID пользователя не указан" });
+  }
+
   try {
     await prisma.user.update({
       where: {

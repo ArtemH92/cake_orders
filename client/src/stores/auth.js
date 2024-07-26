@@ -23,12 +23,7 @@ export const useAuthStore = defineStore('auth', () => {
   const register = async (userData) => {
     await api
       .post('/users/register', userData)
-      .then((response) => {
-        localStorage.setItem('token', response.data.token);
-        Object.assign(user, response.data)
-        token.value = response.data.token
-        error.value = null
-      })
+      .then()
       .catch((err) => {
         error.value = err.message
       })
@@ -45,11 +40,22 @@ export const useAuthStore = defineStore('auth', () => {
       })
   }
 
+  const editUser = async (id, data) => {
+    await api
+      .put(`/users/current/edit/${id}`, data)
+      .then((response) => {
+        Object.assign(user, response.data)
+      })
+      .catch((err) => {
+        error.value = err.message
+      })
+  }
+
   const logout = () => {
     localStorage.removeItem('token')
     Object.keys(user).forEach(key => delete user[key])
     token.value = null
   }
 
-  return { user, token, error, login, register, getUser, logout }
+  return { user, token, error, login, register, getUser, editUser, logout }
 })

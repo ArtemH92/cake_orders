@@ -2,7 +2,9 @@
 import { reactive, computed, ref } from 'vue'
 import { LayoutLogin, RulesRegister } from '@/lib/formConfig'
 import { useAuthStore } from '@/stores/auth';
-import CreateUser from '@/models/createUser.module';
+import { CreateUser, SendUser } from '@/models/users/createUser.module';
+import { message } from 'ant-design-vue';
+import { vMaska } from 'maska'
 
 const formRef = ref()
 const userData = reactive(new CreateUser)
@@ -11,7 +13,10 @@ const emit = defineEmits(['closeModal'])
 const { register } = useAuthStore()
 
 const handleFinish = (values) => {
-  register({username: values.username, password: values.password, phone: values.phone, administrator: values.administrator}).then(() => emit('closeModal'))
+  register(new SendUser(values)).then(() => {
+    message.success('Пользователь успешно создан')
+    emit('closeModal')
+  })
 }
 const handleFinishFailed = (errors) => {
   console.log(errors)
@@ -50,7 +55,7 @@ const rules = computed(() => RulesRegister(userData.password));
       </a-form-item>
 
       <a-form-item label="Номер телефона" name="phone">
-        <a-input v-model:value="userData.phone" type="text" />
+        <a-input v-model:value="userData.phone" type="text" v-maska data-maska="+375 (##) ### ## ##" />
       </a-form-item>
 
       <a-form-item label="Дать права администратора" name="administrator">
