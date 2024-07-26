@@ -56,8 +56,8 @@ const handleFinish = (values) => {
 
       <div class="flex justify-evenly flex-wrap">
         <a-button type="primary" html-type="submit" v-show="!disabled">Созранить</a-button>
-        <a-button @click="emit('closeModal')" v-show="!disabled">Отмена</a-button>
         <a-button @click="disabled = false" v-show="disabled">Редактировать</a-button>
+        <a-button @click="emit('closeModal')">Отмена</a-button>
       </div>
 
     </a-form>
