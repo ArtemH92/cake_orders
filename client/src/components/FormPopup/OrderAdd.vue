@@ -4,7 +4,6 @@ import { Choices } from '@/lib/choicesSelect'
 import { FormLayout } from '@/lib/formConfig'
 import { CreateOrder } from '@/models/orders/order.module'
 import { useOrderStore } from '@/stores/orders'
-import { message } from 'ant-design-vue'
 import { RulesCreateOrder } from '@/lib/formConfig'
 
 const formRef = ref();
@@ -15,7 +14,8 @@ const { addOrder } = useOrderStore()
 
 const handleFinish = (data) => {
   data.status = 'inProcessing'
-  addOrder(data).then(() => message.config('Заказ успешно создан'))
+  addOrder(data).then()
+  emit('closeModal')
 }
 
 const ChangeHandler = () => {

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue'
 import api from '@/api'
+import { message } from 'ant-design-vue'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = reactive({})
@@ -14,8 +15,9 @@ export const useAuthStore = defineStore('auth', () => {
         localStorage.setItem('token', response.data.token);
         Object.assign(user, response.data)
         token.value = response.data.token
+        message.success('Вы вошли в систему')
       })
-      .catch((err) => {
+      .catch((err) => { 
         error.value = err.message
       })
   }
@@ -55,6 +57,7 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('token')
     Object.keys(user).forEach(key => delete user[key])
     token.value = null
+    message.success('Вы вышли из системы')
   }
 
   return { user, token, error, login, register, getUser, editUser, logout }
