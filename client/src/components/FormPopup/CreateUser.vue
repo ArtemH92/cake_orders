@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { reactive, computed, ref } from 'vue'
-import { LayoutLogin, RulesRegister } from '@/lib/formConfig'
+import { FormLayout, RulesRegister } from '@/lib/formConfig'
 import { useAuthStore } from '@/stores/auth';
-import { CreateUser, SendUser } from '@/models/users/createUser.module';
+import { CreateUser, SendUser } from '@/models/users/user.module';
 import { message } from 'ant-design-vue';
 import { vMaska } from 'maska'
 
@@ -38,7 +38,7 @@ const rules = computed(() => RulesRegister(userData.password));
       class="mt-8"
       :model="userData"
       :rules="rules"
-      v-bind="LayoutLogin"
+      v-bind="FormLayout"
       @finish="handleFinish"
       @finishFailed="handleFinishFailed"
     >

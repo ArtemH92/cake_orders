@@ -1,17 +1,15 @@
 <script setup>
 import { ref, reactive } from 'vue'
-import { EditUser } from '@/models/users/createUser.module';
+import { EditUser } from '@/models/users/user.module';
 import { useAuthStore } from '@/stores/auth';
-import { LayoutLogin } from '@/lib/formConfig'
+import { FormLayout } from '@/lib/formConfig'
 import { message } from 'ant-design-vue';
 import { vMaska } from 'maska'
 
 const formRef = ref()
 const disabled = ref(true)
 const emit = defineEmits(['closeModal'])
-const { user, getUser, editUser } = useAuthStore()
-
-getUser()
+const { user, editUser } = useAuthStore()
 
 let userData = reactive(new EditUser(user))
 
@@ -37,7 +35,7 @@ const handleFinish = (values) => {
       autocomplete="off" 
       class="mt-8"
       :model="userData"
-      v-bind="LayoutLogin"
+      v-bind="FormLayout"
       @finish="handleFinish(userData)"
     >
       <a-form-item label="Имя пользователя" name="username">

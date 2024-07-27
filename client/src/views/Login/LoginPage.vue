@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref, reactive } from 'vue'
-import { LayoutLogin, RulesLogin } from '@/lib/formConfig'
+import { FormLayout, RulesLogin } from '@/lib/formConfig'
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 
@@ -37,7 +37,7 @@ const handleFinishFailed = (errors) => {
       class="mt-8"
       :model="userData"
       :rules="RulesLogin"
-      v-bind="LayoutLogin"
+      v-bind="FormLayout"
       @finish="handleFinish(userData)"
       @finishFailed="handleFinishFailed"
     >

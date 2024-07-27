@@ -11,7 +11,7 @@ export const useOrderStore = defineStore('orders', () => {
     await api 
       .get('/orders/')
       .then((response) => {
-        orders.concat(response.data)
+        Object.assign(orders, response.data)
       })
       .catch((err) => {
         error.value = err.message
