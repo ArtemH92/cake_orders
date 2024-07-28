@@ -13,15 +13,21 @@ export const ColumnsTable = [
     title: 'Дата и время',
     key: 'dateTime',
     customRender: ({ record }) => {
-      const date = moment(record.date, 'DD-MM-YYYY').format('DD-MM-YYYY')
+      const day = moment(record.date, 'YYYY-MM-DD').format('DD')
+      const month = moment(record.date, 'YYYY-MM-DD').format('MM')
+      const year = moment(record.date, 'YYYY-MM-DD').format('YYYY')
       const time = moment(new Date(record.time)).format('HH:mm')
-      return `${date} ${time}`
+      return `${day}-${month}-${year} ${time}`
     }
   },
   {
     title: 'Примечания',
     dataIndex: 'notes',
-    key: 'notes'
+    key: 'notes',
+    customRender: ({record}) => {
+      const notes = record.notes === '' || record.notes === null ? '-' : record.notes
+      return notes
+    }
   },
   {
     title: 'Действие',

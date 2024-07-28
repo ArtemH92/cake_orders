@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue'
 import api from '@/api'
 import { message } from 'ant-design-vue'
+import moment from 'moment'
 
 export const useOrderStore = defineStore('orders', () => {
   const orders = reactive([])
@@ -58,6 +59,36 @@ export const useOrderStore = defineStore('orders', () => {
       .finally(() => loading.value = false)
   
   }
+  
+  const editOrder = async(id, data) => {
+    await api
+      .put(`/orders/edit/${id}`, data)
+      .then((response) => {
+        Object.assign(order, response.data)
+        getAll()
+      })
+      .catch((err) => error.value = err.message )
+  }
 
-  return { orders, order, error, loading, getAll, addOrder, remove }
+  const getOrder = async(id) => {
+    loading.value = true
+    await api 
+      .get(`/orders/${id}`)
+      .then((response) => {
+        loading.value = false
+        Object.assign(order, transformDate(response.data))
+      })
+      .catch((err) => error.value = err.message )
+      .finally(() => loading.value = false)
+  }
+
+  const transformDate = (data) => {
+    return {
+      ...data,
+      date: moment(data.date),
+      time: moment(data.time),
+    }
+  }
+
+  return { orders, order, error, loading, getAll, addOrder, remove, editOrder, getOrder }
 })

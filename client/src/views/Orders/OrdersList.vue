@@ -6,20 +6,22 @@ import ModalWindow from '@/components/ModalWindow.vue'
 import OrderAdd from '@/components/FormPopup/OrderAdd.vue'
 import { ModalState, ModalValue, hendlerModal } from '@/functions/modal'
 import DangerModal from '@/components/DangerModal.vue'
-import { ref } from 'vue'
-import StatusButton from '@/components/StatusButton.vue'
 import { useAuthStore } from '@/stores/auth'
-import StatusCell from './StatusCell.vue'
+import StatusCell from './Cells/StatusCell.vue'
+import { changeStatusOrder } from '@/functions/changeStatusList'
+import OperationCell from './Cells/OperationCell.vue'
+import { ConfirmModalConfig } from '@/lib/confirmModalConfig'
+import EditOrder from '@/components/FormPopup/EditOrder.vue'
+import { idOrder, statusOrder, modalRemove, modalChangeStatus, modalEdit } from '@/lib/modalFunction'
 
 const { orders, getAll, remove, loading } = useOrderStore()
+
 const { user } = useAuthStore()
+
 getAll()
 
-const idOrder = ref('')
-const modal = (id) => {
-  idOrder.value = id
-  hendlerModal(true, 'remove')
-}
+const { removeOrder, confirm } = ConfirmModalConfig
+
 </script>
 
 <template>
@@ -34,11 +36,13 @@ const modal = (id) => {
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'operation'">
-            <a-space :compact="true" :size="['small', 'middle']">
-              <a-button type="primary"> Редактировать </a-button>
-              <a-button danger @click="modal(record.id)"> Удалить </a-button>
-              <StatusButton :data="record" v-if="user.administrator" />
-            </a-space>
+            <OperationCell 
+              :data="record" 
+              :administrator="user.administrator" 
+              @click-btn="({id, status}) => modalChangeStatus(id, status)"
+              @openModal="(id) => modalRemove(id, 'remove')"
+              @edit="(id) => modalEdit(id, 'edit')"
+            />
           </template>
           <template v-if="column.key === 'status'">
             <StatusCell :status="record.status" />
@@ -49,13 +53,27 @@ const modal = (id) => {
         <OrderAdd v-if="ModalValue === 'addOrder'" @close-modal="hendlerModal(false, '')" />
         <DangerModal
           v-if="ModalValue === 'remove'"
-          @remove="
+          :config="removeOrder"
+          @confirm="
             () => {
               remove(idOrder)
               hendlerModal(false, '')
             }
           "
           @cancel="hendlerModal(false, '')"
+        />
+        <DangerModal
+          v-if="ModalValue === 'changeStatus'"
+          :config="confirm"
+          @confirm="() => {
+            changeStatusOrder(idOrder, statusOrder)
+            hendlerModal(false, '')
+          }"
+          @cancel="hendlerModal(false, '')"
+        />
+        <EditOrder 
+          v-if="ModalValue === 'edit' && !loading"
+          @close-modal="hendlerModal(false, '')"
         />
       </ModalWindow>
     </div>
