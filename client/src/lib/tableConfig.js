@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment'
 
 export const ColumnsTable = [
   {
@@ -13,7 +13,7 @@ export const ColumnsTable = [
     title: 'Дата и время',
     key: 'dateTime',
     customRender: ({ record }) => {
-      const date = moment(record.date, 'YYYY-MM-DD').format('YYYY-MM-DD')
+      const date = moment(record.date, 'DD-MM-YYYY').format('DD-MM-YYYY')
       const time = moment(new Date(record.time)).format('HH:mm')
       return `${date} ${time}`
     }
@@ -27,4 +27,8 @@ export const ColumnsTable = [
     title: 'Действие',
     key: 'operation'
   },
+  {
+    title: 'Статус заказа',
+    key: 'status',
+  }
 ]

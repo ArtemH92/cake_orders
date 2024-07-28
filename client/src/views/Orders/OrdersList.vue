@@ -7,8 +7,12 @@ import OrderAdd from '@/components/FormPopup/OrderAdd.vue'
 import { ModalState, ModalValue, hendlerModal } from '@/functions/modal'
 import DangerModal from '@/components/DangerModal.vue'
 import { ref } from 'vue'
+import StatusButton from '@/components/StatusButton.vue'
+import { useAuthStore } from '@/stores/auth'
+import StatusCell from './StatusCell.vue'
 
 const { orders, getAll, remove, loading } = useOrderStore()
+const { user } = useAuthStore()
 getAll()
 
 const idOrder = ref('')
@@ -16,7 +20,6 @@ const modal = (id) => {
   idOrder.value = id
   hendlerModal(true, 'remove')
 }
-
 </script>
 
 <template>
@@ -34,7 +37,11 @@ const modal = (id) => {
             <a-space :compact="true" :size="['small', 'middle']">
               <a-button type="primary"> Редактировать </a-button>
               <a-button danger @click="modal(record.id)"> Удалить </a-button>
+              <StatusButton :data="record" v-if="user.administrator" />
             </a-space>
+          </template>
+          <template v-if="column.key === 'status'">
+            <StatusCell :status="record.status" />
           </template>
         </template>
       </a-table>
