@@ -57,6 +57,7 @@ export const useAuthStore = defineStore('auth', () => {
       .put(`/users/current/edit/${id}`, data)
       .then((response) => {
         Object.assign(user, response.data)
+        getUser()
       })
       .catch((err) => {
         error.value = err.message

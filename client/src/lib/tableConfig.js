@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-export const ColumnsTable = [
+export const ColumnsTableOrders = [
   {
     title: 'Изделие',
     dataIndex: 'dessert',
@@ -38,3 +38,25 @@ export const ColumnsTable = [
     key: 'status',
   }
 ]
+
+export const ColumnsTableUsers = [
+  {
+    title: 'Имя',
+    dataIndex: 'username'
+  },
+  {
+    title: 'Номер телефона',
+    customRender: ({ record }) => {
+      const phone = record.phone != '' ? record.phone : '-'
+      return phone
+    }
+  },
+  {
+    title: 'Роль',
+    customRender: ({record}) => {
+      const user = record.administrator ? 'Администратор' : 'Пользователь'
+      return user
+    }
+  }
+]
+

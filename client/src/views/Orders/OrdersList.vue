@@ -1,10 +1,10 @@
 <script setup>
 import HeaderList from '@/components/HeaderList.vue'
 import { useOrderStore } from '@/stores/orders'
-import { ColumnsTable } from '@/lib/tableConfig'
+import { ColumnsTableOrders } from '@/lib/tableConfig'
 import ModalWindow from '@/components/ModalWindow.vue'
 import OrderAdd from '@/components/FormPopup/OrderAdd.vue'
-import { ModalState, ModalValue, hendlerModal } from '@/functions/modal'
+import { ModalState, ModalValue, hendlerModal } from '../../functions/modal'
 import DangerModal from '@/components/DangerModal.vue'
 import { useAuthStore } from '@/stores/auth'
 import StatusCell from './Cells/StatusCell.vue'
@@ -26,10 +26,14 @@ const { removeOrder, confirm } = ConfirmModalConfig
 
 <template>
   <a-spin :spinning="loading">
-    <HeaderList @add-order="hendlerModal(true, 'addOrder')" />
+    <HeaderList 
+      @add-order="hendlerModal(true, 'addOrder')" 
+      :title="'Лист заказов'"
+      :btn-text="'Создать заказ'"
+    />
     <div class="max-w-full overflow-x-auto">
       <a-table
-        :columns="ColumnsTable"
+        :columns="ColumnsTableOrders"
         :data-source="orders"
         :scroll="{ x: true }"
         class="md:w-auto lg:w-full xl:w-full"

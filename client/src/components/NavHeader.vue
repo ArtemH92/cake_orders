@@ -5,6 +5,7 @@ import { useAuthStore } from '@/stores/auth';
 import ModalWindow from './ModalWindow.vue';
 import CreateUser from './FormPopup/CreateUser.vue';
 import EditUser from './FormPopup/EditUser.vue';
+import UsersList from './UsersList.vue'
 import DropDownMenu from './DropDownMenu.vue';
 
 const { user, getUser } = useAuthStore()
@@ -43,10 +44,12 @@ onUnmounted(() => {
         :administrator="user?.administrator"
         @created-user="handleModal(true, 'createUser')"
         @edit-user="handleModal(true, 'editUser')"
+        @users="handleModal(true, 'users')"
       />
       <ModalWindow v-if="openModal" :is-active="openModal">
         <CreateUser @close-modal="handleModal(false, '')" v-if="modal === 'createUser'" />
         <EditUser v-if="modal === 'editUser'" @close-modal="handleModal(false, '')" />
+        <UsersList v-if="modal === 'users'" @close-modal="handleModal(false, '')" />
       </ModalWindow>
     </div>
   </a-layout-header>
