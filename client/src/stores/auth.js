@@ -18,7 +18,7 @@ export const useAuthStore = defineStore('auth', () => {
         message.success('Вы вошли в систему')
       })
       .catch((err) => { 
-        error.value = err.message
+        message.error(err.response.data.message)
       })
   }
 
