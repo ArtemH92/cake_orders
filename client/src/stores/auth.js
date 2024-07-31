@@ -4,6 +4,7 @@ import api from '@/api'
 import { message } from 'ant-design-vue'
 
 export const useAuthStore = defineStore('auth', () => {
+  const users = reactive([])
   const user = reactive({})
   const token = ref(null)
   const error = ref(null)
@@ -42,6 +43,15 @@ export const useAuthStore = defineStore('auth', () => {
       })
   }
 
+  const getUsers = async () => {
+    await api
+      .get('/users/')
+      .then((response) => {
+        Object.assign(users, response.data)
+      })
+      .catch((err) => error.value = err.message)
+  }
+
   const editUser = async (id, data) => {
     await api
       .put(`/users/current/edit/${id}`, data)
@@ -53,6 +63,13 @@ export const useAuthStore = defineStore('auth', () => {
       })
   }
 
+  const removeUser = async (id) => {
+    await api
+      .post(`/users/remove/${id}`)
+      .then(() => message.success('Пользователь успешно удален'))
+      .catch((err) => message.error(err.response.data.message))
+  }
+
   const logout = () => {
     localStorage.removeItem('token')
     Object.keys(user).forEach(key => delete user[key])
@@ -60,5 +77,5 @@ export const useAuthStore = defineStore('auth', () => {
     message.success('Вы вышли из системы')
   }
 
-  return { user, token, error, login, register, getUser, editUser, logout }
+  return { user, users, token, error, login, register, getUser, getUsers, editUser, removeUser, logout }
 })

@@ -112,6 +112,21 @@ const getUser = async (req, res) => {
 };
 
 /**
+ * @route GET /api/user/
+ * @desc Получить всех пользователей
+ * @access Private
+ */
+const getUsers = async (req, res) => {
+  try {
+    const users = await prisma.user.findMany();
+
+    res.status(200).json(users);
+  } catch {
+    res.status(500).json({ message: "Не удалось получить пользователей" });
+  }
+};
+
+/**
  * @route PUT /api/users/edit/:id
  * @desc Редактирование пользователя
  * @access Private
@@ -177,5 +192,6 @@ module.exports = {
   removeUser,
   current,
   getUser,
+  getUsers,
   editUser
 };
