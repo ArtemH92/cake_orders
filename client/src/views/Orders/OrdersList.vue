@@ -37,6 +37,7 @@ const { removeOrder, confirm } = ConfirmModalConfig
         :data-source="orders"
         :scroll="{ x: true }"
         class="md:w-auto lg:w-full xl:w-full"
+        :loading="loading"
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'operation'">

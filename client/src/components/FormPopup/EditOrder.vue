@@ -89,7 +89,8 @@ const ChangeHandler = () => {
       </a-form-item>
 
       <a-form-item label="Фото" name="photo">
-        <a-input type="text" v-model:value="orderData.photo" :disabled="disabled" />
+        В разработке
+        <!-- <a-input type="text" v-model:value="orderData.photo" /> -->
       </a-form-item>
 
       <a-form-item label="Дата" name="date">

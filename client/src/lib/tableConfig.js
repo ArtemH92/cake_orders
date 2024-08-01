@@ -12,6 +12,10 @@ export const ColumnsTableOrders = [
   {
     title: 'Дата и время',
     key: 'dateTime',
+    sorter: {
+      compare: (a, b) => moment(a.date) - moment(b.date),
+      multiple: 1,
+    },
     customRender: ({ record }) => {
       const day = moment(record.date, 'YYYY-MM-DD').format('DD')
       const month = moment(record.date, 'YYYY-MM-DD').format('MM')
