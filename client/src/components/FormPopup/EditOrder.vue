@@ -4,6 +4,7 @@ import { Choices } from '@/lib/choicesSelect'
 import { FormLayout } from '@/lib/formConfig'
 import { useOrderStore } from '@/stores/orders'
 import { RulesCreateOrder } from '@/lib/formConfig'
+import { UploadOutlined } from '@ant-design/icons-vue'
 
 onMounted(() => getOrder)
 const formRef = ref()
@@ -15,8 +16,21 @@ const { editOrder, order, getOrder } = useOrderStore()
 
 const orderData = reactive(order)
 
+// const handleFinish = (id, data) => {
+//   editOrder(id, data)
+//   emit('closeModal')
+// }
+
 const handleFinish = (id, data) => {
-  editOrder(id, data)
+  const formData = new FormData()
+  Object.keys(data).forEach(key => {
+    if (key === 'photo' && data[key]) {
+      formData.append('photo', data[key])
+    } else {
+      formData.append(key, data[key])
+    }
+  })
+  editOrder(id, formData)
   emit('closeModal')
 }
 
@@ -29,6 +43,12 @@ const ChangeHandler = () => {
 
   if (orderData.dessert === 'cupcake') {
     orderData.cakeType = ''
+  }
+}
+
+const handlePhotoChange = (info) => {
+  if (info.file.status === 'done') {
+    orderData.photo = info.file.originFileObj
   }
 }
 </script>
@@ -89,8 +109,15 @@ const ChangeHandler = () => {
       </a-form-item>
 
       <a-form-item label="Фото" name="photo">
-        В разработке
-        <!-- <a-input type="text" v-model:value="orderData.photo" /> -->
+        <a-upload
+          name="photo"
+          :before-upload="file => { orderData.photo = file; return false; }"
+          @change="handlePhotoChange"
+        >
+          <a-button>
+            <UploadOutlined /> Click to Upload
+          </a-button>
+        </a-upload>
       </a-form-item>
 
       <a-form-item label="Дата" name="date">

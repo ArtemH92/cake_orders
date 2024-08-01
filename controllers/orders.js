@@ -23,15 +23,26 @@ const all = async (req, res) => {
 const add = async (req, res) => {
   try {
     const data = req.body;
+    const file = req.file;
 
     if (!data.dessert || !data.date || !data.time) {
       return res.status(400).json({ message: "Все поля обязательные" });
     }
 
+    const uploadFile = await prisma.uploadFile.create({
+      data: {
+        filename: file.filename,
+        path: file.path,
+        mimetype: file.mimetype,
+        size: file.size,
+      },
+    });
+
     const order = await prisma.order.create({
       data: {
         ...data,
         createdById: req.user.id,
+        photoId: uploadFile.id,
       },
     });
 
@@ -69,20 +80,46 @@ const remove = async (req, res) => {
  * @access Private
  */
 const edit = async (req, res) => {
-  const data = req.body;
-  const id = data.id;
+  const { id } = req.params;
+  const { dessert, cakeType, cupcakesType, filling, quantity, date, time, status, notes } = req.body;
 
   try {
-    await prisma.order.update({
-      where: {
-        id,
+    let photoId = null;
+
+    if (req.file) {
+      const { filename, path, mimetype, size } = req.file;
+
+      const uploadFile = await prisma.uploadFile.create({
+        data: {
+          filename,
+          path,
+          mimetype,
+          size,
+        },
+      });
+
+      photoId = uploadFile.id;
+    }
+
+    const updatedOrder = await prisma.order.update({
+      where: { id },
+      data: {
+        dessert,
+        cakeType,
+        cupcakesType,
+        filling,
+        quantity,
+        date,
+        time,
+        status,
+        notes,
+        photoId,
       },
-      data,
     });
 
-    res.status(204).json("OK");
-  } catch(err) {
-    res.status(500).json({ message: "Не удалось редактировать заказ" });
+    res.json(updatedOrder);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
@@ -96,14 +133,19 @@ const order = async (req, res) => {
 
   try {
     const order = await prisma.order.findUnique({
-      where: {
-        id,
+      where: { id },
+      include: {
+        photo: true, // Включаем информацию о фото
       },
     });
 
-    res.status(200).json(order);
-  } catch {
-    res.status(500).json({ message: "Не удалось получить заказ" });
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    res.json(order);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
