@@ -29,7 +29,8 @@ model Order {
   cupcakesType   String?
   filling        String?
   quantity       Decimal?
-  photo          String?
+  photo          UploadFile? @relation(fields: [photoId], references: [id])
+  photoId        String? 
   date           DateTime
   time           String 
   status         String 
@@ -40,4 +41,14 @@ model Order {
   createdById    String  
   lastEditedBy   User?    @relation("LastEditedBy", fields: [lastEditedById], references: [id])
   lastEditedById String? 
+}
+
+model UploadFile {
+  id        String   @id @default(uuid())
+  filename  String
+  path      String
+  mimetype  String
+  size      Int
+  createdAt DateTime @default(now())
+  orders    Order[]
 }
