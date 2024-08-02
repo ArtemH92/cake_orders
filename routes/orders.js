@@ -6,8 +6,8 @@ const upload  = require('../middleware/upload');
 
 router.get("/", auth, all);
 router.get("/:id", auth, order);
-router.post("/add", auth, upload.single('photo'), add);
+router.post("/add", auth, upload.array('photos', 5), add);
+router.put("/edit/:id", auth, upload.array('photos', 5), edit);
 router.post("/remove/:id", auth, remove);
-router.put("/edit/:id", auth, upload.single('photo'), edit);
 
 module.exports = router;

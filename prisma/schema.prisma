@@ -23,24 +23,23 @@ model User {
 }
 
 model Order {
-  id             String   @id @default(uuid())
+  id             String        @id @default(uuid())
   dessert        String
   cakeType       String?
   cupcakesType   String?
   filling        String?
   quantity       Decimal?
-  photo          UploadFile? @relation(fields: [photoId], references: [id])
-  photoId        String? 
+  photos         UploadFile[]  @relation("OrderPhotos")
   date           DateTime
-  time           String 
-  status         String 
+  time           String
+  status         String
   notes          String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  createdBy      User     @relation("CreatedBy", fields: [createdById], references: [id])
-  createdById    String  
-  lastEditedBy   User?    @relation("LastEditedBy", fields: [lastEditedById], references: [id])
-  lastEditedById String? 
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  createdBy      User          @relation("CreatedBy", fields: [createdById], references: [id])
+  createdById    String
+  lastEditedBy   User?         @relation("LastEditedBy", fields: [lastEditedById], references: [id])
+  lastEditedById String?
 }
 
 model UploadFile {
@@ -50,5 +49,6 @@ model UploadFile {
   mimetype  String
   size      Int
   createdAt DateTime @default(now())
-  orders    Order[]
+  order     Order?   @relation("OrderPhotos", fields: [orderId], references: [id])
+  orderId   String?
 }

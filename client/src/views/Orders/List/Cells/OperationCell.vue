@@ -14,7 +14,7 @@ const emit = defineEmits(['click-btn', 'openModal', 'edit'])
     <a-button 
       type="primary" 
       :disabled="props.administrator === false ? true : props.data.status != 'isProcessing' ? false : true"
-      @click="emit('edit', props.data.id)"
+      @click="emit('edit')"
     >
       Редактировать
     </a-button>

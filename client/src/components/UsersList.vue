@@ -1,7 +1,7 @@
 <script setup>
 import { useAuthStore } from '@/stores/auth'
 import { ColumnsTableUsers } from '@/lib/tableConfig'
-import HeaderList from './HeaderList.vue'
+import HeaderList from './HeaderPages.vue'
 
 const { getUsers, users } = useAuthStore()
 getUsers()

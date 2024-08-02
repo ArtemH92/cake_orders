@@ -1,18 +1,19 @@
 <script setup>
-import HeaderList from '@/components/HeaderList.vue'
+import HeaderList from '@/components/HeaderPages.vue'
 import { useOrderStore } from '@/stores/orders'
 import { ColumnsTableOrders } from '@/lib/tableConfig'
 import ModalWindow from '@/components/ModalWindow.vue'
-import OrderAdd from '@/components/FormPopup/OrderAdd.vue'
-import { ModalState, ModalValue, hendlerModal } from '../../functions/modal'
+import { ModalState, ModalValue, hendlerModal } from '../../../functions/modal'
 import DangerModal from '@/components/DangerModal.vue'
 import { useAuthStore } from '@/stores/auth'
 import StatusCell from './Cells/StatusCell.vue'
 import { changeStatusOrder } from '@/functions/changeStatusList'
 import OperationCell from './Cells/OperationCell.vue'
 import { ConfirmModalConfig } from '@/lib/confirmModalConfig'
-import EditOrder from '@/components/FormPopup/EditOrder.vue'
-import { idOrder, statusOrder, modalRemove, modalChangeStatus, modalEdit } from '@/lib/modalFunction'
+import { idOrder, statusOrder, modalRemove, modalChangeStatus } from '@/lib/modalFunction'
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
 
 const { orders, getAll, remove, loading } = useOrderStore()
 
@@ -27,7 +28,7 @@ const { removeOrder, confirm } = ConfirmModalConfig
 <template>
   <a-spin :spinning="loading">
     <HeaderList 
-      @add-order="hendlerModal(true, 'addOrder')" 
+      :url="'/orders/add'"
       :title="'Лист заказов'"
       :btn-text="'Создать заказ'"
     />
@@ -46,7 +47,7 @@ const { removeOrder, confirm } = ConfirmModalConfig
               :administrator="user.administrator" 
               @click-btn="({id, status}) => modalChangeStatus(id, status)"
               @openModal="(id) => modalRemove(id, 'remove')"
-              @edit="(id) => modalEdit(id, 'edit')"
+              @edit="() => router.push(`/orders/edit/${record.id}`)"
             />
           </template>
           <template v-if="column.key === 'status'">
@@ -55,7 +56,6 @@ const { removeOrder, confirm } = ConfirmModalConfig
         </template>
       </a-table>
       <ModalWindow v-if="ModalState" :is-active="ModalState">
-        <OrderAdd v-if="ModalValue === 'addOrder'" @close-modal="hendlerModal(false, '')" />
         <DangerModal
           v-if="ModalValue === 'remove'"
           :config="removeOrder"
@@ -75,10 +75,6 @@ const { removeOrder, confirm } = ConfirmModalConfig
             hendlerModal(false, '')
           }"
           @cancel="hendlerModal(false, '')"
-        />
-        <EditOrder 
-          v-if="ModalValue === 'edit' && !loading"
-          @close-modal="hendlerModal(false, '')"
         />
       </ModalWindow>
     </div>

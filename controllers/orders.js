@@ -36,28 +36,36 @@ const add = async (req, res) => {
         time: isoTime,
         status,
         createdById,
-        photoId,
     }
-    const file = req.file;
+    
 
     if (!data.dessert || !data.date || !data.time) {
       return res.status(400).json({ message: "Все поля обязательные" });
     }
 
-    const uploadFile = await prisma.uploadFile.create({
-      data: {
-        filename: file.filename,
-        path: file.path,
-        mimetype: file.mimetype,
-        size: file.size,
-      },
-    });
+    const files = req.files;
+    if (!files || files.length === 0) {
+      return res.status(400).json({ message: "Необходимо загрузить хотя бы одно фото" });
+    }
+
+    const uploadFiles = await Promise.all(files.map(file => 
+      prisma.uploadFile.create({
+        data: {
+          filename: file.filename,
+          path: file.path,
+          mimetype: file.mimetype,
+          size: file.size,
+        },
+      })
+    ));
 
     const order = await prisma.order.create({
       data: {
         ...data,
         createdById: req.user.id,
-        photoId: uploadFile.id,
+        photos: {
+          connect: uploadFiles.map(file => ({ id: file.id }))
+        },
       },
     });
 
@@ -99,21 +107,20 @@ const edit = async (req, res) => {
   const { dessert, cakeType, cupcakesType, filling, quantity, date, time, status, notes } = req.body;
 
   try {
-    let photoId = null;
+    let newPhotoIds = [];
 
-    if (req.file) {
-      const { filename, path, mimetype, size } = req.file;
-
-      const uploadFile = await prisma.uploadFile.create({
-        data: {
-          filename,
-          path,
-          mimetype,
-          size,
-        },
-      });
-
-      photoId = uploadFile.id;
+    if (req.files && req.files.length > 0) {
+      const uploadFiles = await Promise.all(req.files.map(file => 
+        prisma.uploadFile.create({
+          data: {
+            filename: file.filename,
+            path: file.path,
+            mimetype: file.mimetype,
+            size: file.size,
+          },
+        })
+      ));
+      newPhotoIds = uploadFiles.map(file => file.id);
     }
 
     const isoDate = new Date(date).toISOString();
@@ -134,7 +141,9 @@ const edit = async (req, res) => {
         time: isoTime,
         status,
         notes: parsedNotes,
-        photoId,
+        photos: {
+          connect: newPhotoIds.map(file => ({ id: file.id }))
+        },
       },
     });
 
@@ -149,24 +158,24 @@ const edit = async (req, res) => {
  * @desc Получение заказа
  * @access Private
  */
+
 const order = async (req, res) => {
   const { id } = req.params;
-
   try {
     const order = await prisma.order.findUnique({
       where: { id },
       include: {
-        photo: true, // Включаем информацию о фото
+        photos: true, // Включаем информацию о всех фотографиях
       },
     });
 
     if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
+      return res.status(404).json({ message: 'Заказ не найден' });
     }
 
     res.json(order);
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: `Что-то пошло не так, ${error}` });
   }
 };
 

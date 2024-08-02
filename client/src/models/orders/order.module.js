@@ -7,7 +7,7 @@ export class CreateOrder {
     cupcakesType: '',
     filling: '',
     quantity: null,
-    photo: '',
+    photos: [],
     date: '',
     time: '',
     status: '',
