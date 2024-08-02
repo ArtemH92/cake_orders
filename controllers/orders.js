@@ -22,7 +22,22 @@ const all = async (req, res) => {
  */
 const add = async (req, res) => {
   try {
-    const data = req.body;
+    const { dessert, cakeType, cupcakesType, filling, quantity, date, time, status, createdById, photoId } = req.body;
+    const numericQuantity = quantity === "null" || quantity === "" ? null : parseFloat(quantity);
+    const isoDate = new Date(date).toISOString();
+    const isoTime = new Date(time).toISOString();
+    const data = {
+        dessert,
+        cakeType,
+        cupcakesType,
+        filling,
+        quantity: numericQuantity,
+        date: isoDate,
+        time: isoTime,
+        status,
+        createdById,
+        photoId,
+    }
     const file = req.file;
 
     if (!data.dessert || !data.date || !data.time) {
@@ -49,7 +64,7 @@ const add = async (req, res) => {
     return res.status(201).json(order);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Что-то пошло не так" });
+    res.status(500).json({ message: `Что-то пошло не так ${err}` });
   }
 };
 
@@ -101,6 +116,12 @@ const edit = async (req, res) => {
       photoId = uploadFile.id;
     }
 
+    const isoDate = new Date(date).toISOString();
+    const isoTime = new Date(time).toISOString();
+
+    const numericQuantity = quantity === "null" || quantity === "" ? null : parseFloat(quantity);
+    const parsedNotes = notes === "null" ? null : notes;
+
     const updatedOrder = await prisma.order.update({
       where: { id },
       data: {
@@ -108,18 +129,18 @@ const edit = async (req, res) => {
         cakeType,
         cupcakesType,
         filling,
-        quantity,
-        date,
-        time,
+        quantity: numericQuantity,
+        date: isoDate,
+        time: isoTime,
         status,
-        notes,
+        notes: parsedNotes,
         photoId,
       },
     });
 
     res.json(updatedOrder);
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: `Server error ${error}` } );
   }
 };
 

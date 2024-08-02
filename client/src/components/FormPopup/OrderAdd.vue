@@ -5,6 +5,8 @@ import { FormLayout } from '@/lib/formConfig'
 import { CreateOrder } from '@/models/orders/order.module'
 import { useOrderStore } from '@/stores/orders'
 import { RulesCreateOrder } from '@/lib/formConfig'
+import { UploadOutlined } from '@ant-design/icons-vue'
+// import moment from 'moment'
 
 const formRef = ref();
 const emit = defineEmits(['closeModal'])
@@ -12,9 +14,22 @@ const orderData = reactive(new CreateOrder())
 const { dessertChoice, cakeTypeChoice, cupcakesTypeChoice, fillingChoice } = Choices
 const { addOrder } = useOrderStore()
 
+// const handleFinish = (data) => {
+//   data.status = 'inProcessing'
+//   addOrder(data).then()
+//   emit('closeModal')
+// }
+
 const handleFinish = (data) => {
-  data.status = 'inProcessing'
-  addOrder(data).then()
+  const formData = new FormData()
+  Object.keys(data).forEach(key => {
+    if (key === 'photo' && data[key]) {
+      formData.append('photo', data[key])
+    } else {
+      formData.append(key, data[key])
+    }
+  })
+  addOrder(data)
   emit('closeModal')
 }
 
@@ -32,6 +47,12 @@ const ChangeHandler = () => {
 
 const handleFinishFailed = (errors) => {
   console.log(errors)
+}
+
+const handlePhotoChange = (info) => {
+  if (info.file.status === 'done') {
+    orderData.photo = info.file.originFileObj
+  }
 }
 </script>
 
@@ -86,9 +107,20 @@ const handleFinishFailed = (errors) => {
         <a-input-number :min="9" v-model:value="orderData.quantity" />
       </a-form-item>
 
-      <a-form-item label="Фото" name="photo">
+      <!-- <a-form-item label="Фото" name="photo">
         В разработке
-        <!-- <a-input type="text" v-model:value="orderData.photo" /> -->
+        <a-input type="text" v-model:value="orderData.photo" /> 
+      </a-form-item> -->
+      <a-form-item label="Фото" name="photo">
+        <a-upload
+          name="photo"
+          :before-upload="file => { orderData.photo = file; return false; }"
+          @change="handlePhotoChange"
+        >
+          <a-button>
+            <UploadOutlined /> Click to Upload
+          </a-button>
+        </a-upload>
       </a-form-item>
 
       <a-form-item label="Дата" name="date">

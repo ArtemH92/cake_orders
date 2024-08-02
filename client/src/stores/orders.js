@@ -30,7 +30,11 @@ export const useOrderStore = defineStore('orders', () => {
   const addOrder = async (data) => {
     loading.value = true
     await api 
-      .post('/orders/add', data)
+      .post('/orders/add', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
       .then(() => {
         getAll()
         message.success('Заказ успешно создан')
@@ -62,7 +66,11 @@ export const useOrderStore = defineStore('orders', () => {
   
   const editOrder = async(id, data) => {
     await api
-      .put(`/orders/edit/${id}`, data)
+      .put(`/orders/edit/${id}`, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
       .then((response) => {
         Object.assign(order, response.data)
         getAll()
