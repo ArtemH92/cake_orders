@@ -1,12 +1,13 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { Choices } from '@/lib/choicesSelect'
-import { FormLayout } from '@/lib/formConfig'
+import { FormLayout } from '@/lib/Form/formConfig'
 import { useOrderStore } from '@/stores/orders'
-import { RulesCreateOrder } from '@/lib/formConfig'
+import { RulesCreateOrder } from '@/lib/Form/formConfig'
 import { PlusOutlined } from '@ant-design/icons-vue'
 import { useRoute } from 'vue-router'
 import HeaderPages from '@/components/HeaderPages.vue'
+import moment from 'moment'
 
 const route = useRoute()
 const formRef = ref()
@@ -18,7 +19,12 @@ getOrder(route.params.id)
 
 const orderData = reactive(order)
 
+const date = moment(orderData.date)
+const time = moment(orderData.time)
+
 const handleFinish = (id, data) => {
+  data.date = date
+  data.time = time
   const formData = new FormData()
   Object.keys(data).forEach(key => {
     if (key === 'photos' && data[key]) {
@@ -42,11 +48,9 @@ const ChangeHandler = () => {
   }
 }
 
-const handlePhotoChange = (info) => {
-  if (info.file.status === 'done') {
-    orderData.photos = info.file.originFileObj
-  }
-}
+const handlePhotoChange = ({ file, fileList }) => {
+  orderData.photos = fileList;
+};
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -62,6 +66,7 @@ const previewImage = ref('');
 const previewTitle = ref('');
 
 const handlePreview = async file => {
+  console.log(file)
   if (!file.url && !file.preview) {
     file.preview = await getBase64(file.originFileObj);
   }
@@ -139,13 +144,13 @@ const handleCancelFinish = () => {
         </a-form-item>
   
         <a-form-item label="Дата" name="date">
-          <a-date-picker placeholder="" v-model:value="orderData.date" :disabled="disabled" />
+          <a-date-picker placeholder="" v-model:value="date" :disabled="disabled" />
         </a-form-item>
   
         <a-form-item label="Время" name="time">
           <a-time-picker
             placeholder=""
-            v-model:value="orderData.time"
+            v-model:value="time"
             format="HH:mm"
             :disabled="disabled"
           />
@@ -159,10 +164,10 @@ const handleCancelFinish = () => {
           <a-upload
             name="photo"
             v-model:file-list="orderData.photos"
-            :before-upload="file => { orderData.photos = file; return false; }"
             list-type="picture-card"
             @change="handlePhotoChange"
             @preview="handlePreview"
+            :disabled="disabled"
           >
           <div>
             <plus-outlined />
@@ -173,6 +178,7 @@ const handleCancelFinish = () => {
             <img alt="example" style="width: 100%" :src="previewImage" />
           </a-modal>
         </a-form-item>
+
   
         <div class="flex justify-evenly">
           <a-button type="primary" @click="disabled = false" v-show="disabled"

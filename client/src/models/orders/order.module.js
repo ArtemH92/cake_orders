@@ -19,7 +19,7 @@ export class CreateOrder {
     this.cupcakesType = data.cupcakesType
     this.filling = data.filling
     this.quantity = data.quantity
-    this.photo = data.photo
+    this.photos = data.photos
     this.date = data.date
     this.time = data.time
     this.status = data.status
@@ -34,11 +34,16 @@ export class EditOrderData {
     cupcakesType: '',
     filling: '',
     quantity: null,
-    photo: '',
+    photos: [],
     date: '',
     time: '',
     status: '',
-    notes: ''
+    notes: '',
+    createdAt: '',
+    updatedAt: '',
+    createdById: '',
+    lastEditedById: null,
+
   })
   {
     this.id = data.id
@@ -47,9 +52,13 @@ export class EditOrderData {
     this.cupcakesType = data.cupcakesType
     this.filling = data.filling
     this.quantity = data.quantity
-    this.photo = data.photo
+    this.photos = data.photos
     this.date = moment(data.date)
     this.time = moment(data.time)
     this.status = data.status
+    this.createdAt = data.createdAt
+    this.updatedAt = data.updatedAt
+    this.createdById = data.createdById
+    this.lastEditedById = data.lastEditedById
   }
 }

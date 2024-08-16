@@ -1,10 +1,10 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { Choices } from '@/lib/choicesSelect'
-import { FormLayout } from '@/lib/formConfig'
+import { FormLayout } from '@/lib/Form/formConfig'
 import { CreateOrder } from '@/models/orders/order.module'
 import { useOrderStore } from '@/stores/orders'
-import { RulesCreateOrder } from '@/lib/formConfig'
+import { RulesCreateOrder } from '@/lib/Form/formConfig'
 import { PlusOutlined } from '@ant-design/icons-vue'
 import HeaderPages from '@/components/HeaderPages.vue'
 

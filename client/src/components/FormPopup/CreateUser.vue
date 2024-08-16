@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { reactive, computed, ref } from 'vue'
-import { FormLayout, RulesRegister } from '@/lib/formConfig'
+import { FormLayout, RulesRegister } from '@/lib/Form/formConfig'
 import { useAuthStore } from '@/stores/auth';
 import { CreateUser, SendUser } from '@/models/users/user.module';
 import { message } from 'ant-design-vue';

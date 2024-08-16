@@ -2,7 +2,7 @@
 import { ref, reactive } from 'vue'
 import { EditUser } from '@/models/users/user.module';
 import { useAuthStore } from '@/stores/auth';
-import { FormLayout } from '@/lib/formConfig'
+import { FormLayout } from '@/lib/Form/formConfig'
 import { message } from 'ant-design-vue';
 import { vMaska } from 'maska'
 

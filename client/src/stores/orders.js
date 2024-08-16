@@ -73,7 +73,7 @@ export const useOrderStore = defineStore('orders', () => {
       })
       .then((response) => {
         Object.assign(order, response.data)
-        getAll()
+        getOrder(order.id)
       })
       .catch((err) => error.value = err.message )
   }
@@ -84,7 +84,16 @@ export const useOrderStore = defineStore('orders', () => {
       .get(`/orders/${id}`)
       .then((response) => {
         loading.value = false
-        Object.assign(order, transformDate(response.data))
+        Object.assign(order, {
+          ...transformDate(response.data),
+          photos: (response.data.photos || []).map((photo) => ({
+            uid: photo.id,
+            name: photo.filename,
+            url: `/${photo.path}`,
+            status: 'done',
+            originFileObj: { ...photo },
+          })),
+        })
       })
       .catch((err) => error.value = err.message )
       .finally(() => loading.value = false)
