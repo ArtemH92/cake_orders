@@ -4,12 +4,18 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/',
+      redirect: 'orders/list'
+    },
+    {
       path: '/login',
       name: 'login',
-      component: () => import('../views/Login/LoginPage.vue')
+      component: () => import('../views/Login/LoginPage.vue'),
+      meta: { layout: 'not-auth', auth: false }
     },
     {
       path: '/orders',
+      meta: { layout: 'auth', auth: true },
       children: [
         {
           path: 'list',
@@ -29,6 +35,16 @@ const router = createRouter({
       ]
     },
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.auth && !localStorage.getItem('token')) {
+    next('/login')
+  } else if (!to.meta.auth && localStorage.getItem('token')) {
+    next('/')
+  } else {
+    next()
+  }
 })
 
 export default router
