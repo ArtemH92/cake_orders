@@ -37,7 +37,6 @@ const add = async (req, res) => {
 
     return res.status(201).json(order);
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: "Что-то пошло не так" });
   }
 };

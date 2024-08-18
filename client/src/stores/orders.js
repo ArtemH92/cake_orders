@@ -51,7 +51,6 @@ export const useOrderStore = defineStore('orders', () => {
         error.value = err.message
       })
       .finally(() => loading.value = false)
-  
   }
   
   const editOrder = async(id, data) => {
