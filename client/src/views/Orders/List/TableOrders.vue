@@ -14,7 +14,7 @@ const emit = defineEmits(['remove', 'edit', 'status'])
 
 <template>
   <div class="bg-white rounded-md mt-6 box-border p-4">
-    <DataTable :value="props.orders" sortField="date" :sortOrder="1" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]">
+    <DataTable :value="props.orders" sortField="date" :sortOrder="1" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" small>
       <Column header="Изделие" class="w-1/5">
         <template #body="slotProps">
             {{ slotProps.data.dessert === 'cake' ? 'Торт' : 'Капкейк' }}

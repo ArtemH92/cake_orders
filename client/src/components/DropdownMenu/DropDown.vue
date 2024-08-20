@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import { useAuthStore } from "@/stores/auth";
 import Menu from 'primevue/menu';
 import Button from 'primevue/button';
-import ConfirmModal from '../ConfirmModal.vue';
+import ConfirmModal from '../modals/ConfirmModal.vue';
 import GoogleIcon from '../GoogleIcon.vue';
 
 const { logout, user } = useAuthStore()

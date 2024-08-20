@@ -1,22 +1,22 @@
 export const Choices = {
   dessertChoice: [
-    { code: 'cake', label: 'Торт' },
-    { code: 'cupcake', label: 'Капкейк' },
+    { value: 'cake', label: 'Торт' },
+    { value: 'cupcake', label: 'Капкейк' },
   ],
   cakeTypeChoice: [
-    { code: 'milkGirl', label: 'Молочная девочка' },
-    { code: 'bananaCaramelChocolate', label: 'Банан/Карамель/Шоколад' },
-    { code: 'snikers', label: 'Сникерс' },
-    { code: 'Strawberry/Kiwi', label: 'Клубника/Киви' },
-    { code: 'Cherry/Chocolate', label: 'Вишня/Шоколад' },
+    { value: 'milkGirl', label: 'Молочная девочка' },
+    { value: 'bananaCaramelChocolate', label: 'Банан/Карамель/Шоколад' },
+    { value: 'snikers', label: 'Сникерс' },
+    { value: 'Strawberry/Kiwi', label: 'Клубника/Киви' },
+    { value: 'Cherry/Chocolate', label: 'Вишня/Шоколад' },
   ],
   cupcakesTypeChoice: [
-    { code: 'vanilla', label: 'Ваниль' },
-    { code: 'chocolate', label: 'Шоколад' },
+    { value: 'vanilla', label: 'Ваниль' },
+    { value: 'chocolate', label: 'Шоколад' },
   ],
   fillingChoice: [
-    { code: 'cherry', label: 'Вишня' },
-    { code: 'strawberry', label: 'Клубника' },
-    { code: 'caramel', label: 'Карамель' },
+    { value: 'cherry', label: 'Вишня' },
+    { value: 'strawberry', label: 'Клубника' },
+    { value: 'caramel', label: 'Карамель' },
   ],
 }

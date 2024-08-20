@@ -5,7 +5,6 @@ export class CreateOrderData {
     cupcakesType: '',
     filling: '',
     quantity: null,
-    photo: '',
     date: '',
     time: '',
     status: '',
@@ -17,34 +16,6 @@ export class CreateOrderData {
     this.cupcakesType = data.cupcakesType
     this.filling = data.filling
     this.quantity = data.quantity
-    this.photo = data.photo
-    this.date = data.date
-    this.time = data.time
-    this.status = data.status
-    this.notes = data.notes
-  }
-}
-
-export class SendCreateOrderData {
-  constructor(data = {
-    dessert: '',
-    cakeType: '',
-    cupcakesType: '',
-    filling: '',
-    quantity: null,
-    photos: '',
-    date: '',
-    time: '',
-    status: '',
-    notes: ''
-  })
-  {
-    this.dessert = data.dessert != '' ? data.dessert.code : ''
-    this.cakeType = data.cakeType != '' ? data.cakeType.code : ''
-    this.cupcakesType = data.cupcakesType != '' ? data.cupcakesType.code : ''
-    this.filling = data.filling != '' ? data.filling.code : ''
-    this.quantity = data.quantity
-    this.photos = data.photos
     this.date = data.date
     this.time = data.time
     this.status = data.status
@@ -60,7 +31,7 @@ export class AllOrders {
     cupcakesType: '',
     filling: '',
     quantity: null,
-    photos: '',
+    photo: '',
     date: '',
     time: '',
     dateTime: '',
@@ -74,7 +45,7 @@ export class AllOrders {
     this.cupcakesType = data.cupcakesType
     this.filling = data.filling
     this.quantity = data.quantity
-    this.photos = data.photos
+    this.photo = data.photo
     this.date = data.date
     this.time = data.time
     this.statusTag = data.status === 'inProcessing' ? 'В обработке' : data.status === 'inProgress' ? 'Взяли в работу' : data.status === 'done' ? 'Заказ готов' : ''

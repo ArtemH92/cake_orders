@@ -3,10 +3,12 @@ import { useOrderStore } from '@/stores/orders';
 import { onMounted } from 'vue';
 import ListTitle from '@/components/ListTitle.vue';
 import TableOrders from './TableOrders.vue';
-import ConfirmModal from '@/components/ConfirmModal.vue';
+import ConfirmModal from '@/components/modals/ConfirmModal.vue';
 import { ref, reactive } from 'vue';
+import { useRouter } from 'vue-router';
 
 const { orders, getAll, remove, editOrder } = useOrderStore()
+const router = useRouter()
 
 onMounted(() => {
   getAll()
@@ -44,7 +46,7 @@ const confirmModalHandler = () => {
     <TableOrders
       :orders="orders" 
       @remove="(data) => modalHandler('remove', data)"
-      @edit="(data) => modalHandler('edit', data)"
+      @edit="(data) => router.push(`/orders/edit/${data.id}`)"
       @status="(data) => modalHandler('status', data)"
     />
     <ConfirmModal v-model="modalVisible" @confirm="confirmModalHandler" @cancel="modalVisible = false"/>
