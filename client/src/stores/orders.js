@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue'
 import api from '@/api'
+import { AllOrders } from '@/models/order'
 
 export const useOrderStore = defineStore('orders', () => {
   const orders = reactive([])
@@ -16,7 +17,7 @@ export const useOrderStore = defineStore('orders', () => {
         if(response.data.length === 0) {
           orders.splice(0, orders.length)
         }
-        Object.assign(orders, response.data)
+        Object.assign(orders, response.data.map(el => new AllOrders(el)))
         loading.value = false
       })
       .catch((err) => {
@@ -38,6 +39,7 @@ export const useOrderStore = defineStore('orders', () => {
       })
       .finally(() => loading.value = false)
   }
+
 
   const remove = async (id) => {
     loading.value = true

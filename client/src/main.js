@@ -15,8 +15,8 @@ app.use(PrimeVue, {
       preset: MyPreset,
   }
 });
-app.use(ToastService);
 app.use(createPinia())
+app.use(ToastService);
 app.use(router)
 
 app.mount('#app')
