@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import api from '@/api'
 import { AllOrders } from '@/models/order'
 import { useToast } from 'primevue/usetoast'
@@ -9,8 +9,10 @@ export const useOrderStore = defineStore('orders', () => {
   const order = reactive({})
   const error = ref(null)
   const toast = useToast()
+  const loader = ref(false)
 
   const getAll = async () => {
+    loader.value = true
     await api 
       .get('/orders/')
       .then((response) => {
@@ -20,9 +22,11 @@ export const useOrderStore = defineStore('orders', () => {
         Object.assign(orders, response.data.map(el => new AllOrders(el)))
       })
       .catch((err) => {
-        error.value = err.message
+        toast.add({severity: 'error', summary: 'Ошибка!', detail: err, life: 3000})
       })
-      .finally()
+      .finally(() => {
+        loader.value = false
+      })
   }
 
   const addOrder = async (data, successModal) => {
@@ -46,7 +50,7 @@ export const useOrderStore = defineStore('orders', () => {
         getAll()
       })
       .catch((err) => {
-        error.value = err.message
+        toast.add({severity: 'error', summary: 'Ошибка!', detail: err, life: 3000})
       })
       .finally()
   }
@@ -58,7 +62,7 @@ export const useOrderStore = defineStore('orders', () => {
         Object.assign(order, response.data)
         successModal()
       })
-      .catch((err) => error.value = err.message )
+      .catch((err) => toast.add({severity: 'error', summary: 'Ошибка!', detail: err, life: 3000}) )
   }
 
   const getOrder = async(id) => {
@@ -67,9 +71,11 @@ export const useOrderStore = defineStore('orders', () => {
       .then((response) => {
         Object.assign(order, response.data)
       })
-      .catch((err) => error.value = err.message )
+      .catch((err) => toast.add({severity: 'error', summary: 'Ошибка!', detail: err, life: 3000}) )
       .finally()
   }
 
-  return { orders, order, error, getAll, addOrder, remove, editOrder, getOrder }
+  const loading = computed(() => loader)
+ 
+  return { orders, order, error, loading, getAll, addOrder, remove, editOrder, getOrder }
 })

@@ -6,13 +6,15 @@ import TableOrders from './TableOrders.vue';
 import ConfirmModal from '@/components/modals/ConfirmModal.vue';
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
+import StubTable from './StubTable.vue';
 
-const { orders, getAll, remove, editOrder } = useOrderStore()
+const { orders, loading, getAll, remove, editOrder } = useOrderStore()
 const router = useRouter()
 
 onMounted(() => {
   getAll()
 })
+
 const modalVisible = ref(false)
 const modalValue = ref('')
 const order = reactive({})
@@ -37,14 +39,15 @@ const confirmModalHandler = () => {
   }
   modalVisible.value = false
 }
-
 </script>
 
 <template>
   <div>
     <list-title url="/orders/add" btn-label="Создать заказ" title="Список заказов" />
+    <StubTable v-if="loading" />
     <TableOrders
-      :orders="orders" 
+      v-else
+      :orders="orders"
       @remove="(data) => modalHandler('remove', data)"
       @edit="(data) => router.push(`/orders/edit/${data.id}`)"
       @status="(data) => modalHandler('status', data)"
