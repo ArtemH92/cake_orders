@@ -10,6 +10,10 @@ import DatePicker from 'primevue/datepicker'
 import CustomButton from '@/components/CustomButton.vue'
 import { Choices } from '@/lib/choicesSelect'
 
+
+
+const CurrentDate = ref(new Date())
+
 const { dessertChoice, cakeTypeChoice, cupcakesTypeChoice, fillingChoice } = Choices
 const emit = defineEmits(['finish'])
 const route = useRoute()
@@ -20,6 +24,10 @@ const { order, getOrder } = useOrderStore()
 const orderData = reactive(order)
 
 const disabled = ref(true)
+
+
+const date = ref(new Date());
+date.value.setDate(date.value.getDate() + 3)
 </script>
 
 <template>
@@ -80,7 +88,7 @@ const disabled = ref(true)
       </FloatLabel>
 
       <FloatLabel class="mt-6">
-        <DatePicker v-model="orderData.date" date-format="dd mm yy" :disabled="disabled" />
+        <DatePicker v-model="orderData.date" dateFormat="dd mm yy" :disabled="disabled" :min-date="date" />
         <label>Дата</label>
       </FloatLabel>
 

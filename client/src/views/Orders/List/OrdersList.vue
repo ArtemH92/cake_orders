@@ -35,7 +35,6 @@ const confirmModalHandler = () => {
       status: order.status === 'inProcessing' ? 'inProgress' : order.status === 'inProgress' ? 'done' : ''
     }
     editOrder(data.id, data)
-    getAll()
   }
   modalVisible.value = false
 }

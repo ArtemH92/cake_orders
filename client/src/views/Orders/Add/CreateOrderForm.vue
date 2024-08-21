@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import FloatLabel from 'primevue/floatlabel';
 import InputNumber from 'primevue/inputnumber';
 import Select from 'primevue/select';
@@ -29,6 +29,9 @@ const finish = (data) => {
   order.status = 'inProcessing'
   emit('finish', order)
 }
+
+const date = ref(new Date());
+date.value.setDate(date.value.getDate() + 3)
 </script>
 
 <template>
@@ -62,7 +65,7 @@ const finish = (data) => {
     </FloatLabel>
 
     <FloatLabel class="mt-6">
-      <DatePicker v-model="orderData.date" date-format="dd mm yy" />
+      <DatePicker v-model="orderData.date" date-format="dd mm yy" :min-date="date"/>
       <label>Дата</label>
     </FloatLabel>
 
