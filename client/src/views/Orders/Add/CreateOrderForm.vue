@@ -65,13 +65,8 @@ date.value.setDate(date.value.getDate() + 3)
     </FloatLabel>
 
     <FloatLabel class="mt-6">
-      <DatePicker v-model="orderData.date" date-format="dd mm yy" :min-date="date"/>
-      <label>Дата</label>
-    </FloatLabel>
-
-    <FloatLabel class="mt-6">
-      <DatePicker v-model="orderData.time" timeOnly placeholder="Введите в формате 00:00" />
-      <label>Время</label>
+      <DatePicker v-model="orderData.dateTime" date-format="dd mm yy" :min-date="date" showTime hourFormat="24"/>
+      <label>Дата и время</label>
     </FloatLabel>
 
     <FloatLabel class="mt-6">

@@ -1,7 +1,5 @@
 <script setup>
-import { useOrderStore } from '@/stores/orders';
-import { onMounted, reactive, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { reactive, ref } from 'vue';
 import FloatLabel from 'primevue/floatlabel'
 import InputNumber from 'primevue/inputnumber'
 import Select from 'primevue/select'
@@ -11,17 +9,12 @@ import CustomButton from '@/components/CustomButton.vue'
 import { Choices } from '@/lib/choicesSelect'
 
 
-
-const CurrentDate = ref(new Date())
-
 const { dessertChoice, cakeTypeChoice, cupcakesTypeChoice, fillingChoice } = Choices
 const emit = defineEmits(['finish'])
-const route = useRoute()
-
-onMounted(() => getOrder(route.params.id))
-
-const { order, getOrder } = useOrderStore()
-const orderData = reactive(order)
+const props = defineProps({
+  data: Object
+})
+const orderData = reactive(props.data)
 
 const disabled = ref(true)
 
@@ -88,18 +81,8 @@ date.value.setDate(date.value.getDate() + 3)
       </FloatLabel>
 
       <FloatLabel class="mt-6">
-        <DatePicker v-model="orderData.date" dateFormat="dd mm yy" :disabled="disabled" :min-date="date" />
+        <DatePicker v-model="orderData.dateTime" dateFormat="dd mm yy" :disabled="disabled" :min-date="date" showTime hourFormat="24" />
         <label>Дата</label>
-      </FloatLabel>
-
-      <FloatLabel class="mt-6">
-        <DatePicker
-          v-model="orderData.time"
-          timeOnly
-          placeholder="Введите в формате 00:00"
-          :disabled="disabled"
-        />
-        <label>Время</label>
       </FloatLabel>
 
       <FloatLabel class="mt-6">

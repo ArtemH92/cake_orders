@@ -1,14 +1,18 @@
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import ListTitle from '@/components/ListTitle.vue';
-import EditOrderForm from './EditOrderForm.vue';
 import { useOrderStore } from '@/stores/orders';
+import { onMounted, ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import PageTitle from '@/components/PageTitle.vue';
+import EditOrderForm from './EditOrderForm.vue';
 import SuccessModal from '@/components/modals/SuccessModal.vue';
 import Toast from 'primevue/toast';
+import ProgressSpinner from 'primevue/progressspinner';
+
+onMounted(() => getOrder(route.params.id))
+const { order, getOrder, editOrder, loading } = useOrderStore()
 
 const router = useRouter()
-const { editOrder } = useOrderStore()
+const route = useRoute()
 
 const modalVisible = ref(false)
 const modalHandler = () => {
@@ -18,9 +22,12 @@ const modalHandler = () => {
 
 <template>
   <div>
-    <list-title url="/orders/list" btn-label="Вернуться к списку заказов" title="Редактирование заказа" />
+    <PageTitle url="/orders/list" btn-label="Вернуться к списку заказов" title="Редактирование заказа" />
     <div class="flex justify-center mt-5">
-      <EditOrderForm @finish="(data) => editOrder(data.id, data, modalHandler)" />
+      <div class="bg-white rounded-md p-7" v-if="loading">
+        <ProgressSpinner  />
+      </div>
+      <EditOrderForm @finish="(data) => editOrder(data.id, data, modalHandler)" v-else :data="order"/>
     </div>
     <Toast />
     <SuccessModal v-model="modalVisible" @confirm="router.push('/orders/list')" operation="Заказ успешно обновлен" :closable="true" />

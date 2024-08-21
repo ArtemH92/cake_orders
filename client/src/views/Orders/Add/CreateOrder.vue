@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useOrderStore } from '@/stores/orders';
-import ListTitle from '@/components/ListTitle.vue';
+import PageTitle from '@/components/PageTitle.vue';
 import CreateOrderForm from './CreateOrderForm.vue';
 import Toast from 'primevue/toast';
 import { useRouter } from 'vue-router';
@@ -17,7 +17,7 @@ const modalHandler = () => {
 
 <template>
   <div>
-    <list-title url="/orders/list" btn-label="Вернуться к списку заказов" title="Создание заказа" />
+    <PageTitle url="/orders/list" btn-label="Вернуться к списку заказов" title="Создание заказа" />
     <div class="flex justify-center mt-5">
       <div class="bg-white rounded-md p-7">
         <CreateOrderForm @finish="(data) => addOrder(data, modalHandler)"/>

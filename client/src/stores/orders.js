@@ -58,11 +58,14 @@ export const useOrderStore = defineStore('orders', () => {
   }
 
   const getOrder = async (id) => {
+    loader.value = true;
     try {
       const response = await api.get(`/orders/${id}`)
       Object.assign(order, new SingleOrder(response.data))
     } catch (err) {
       toast.add({ severity: 'error', summary: 'Ошибка!', detail: err.message || err, life: 3000 })
+    } finally {
+        loader.value = false;
     }
   }
 

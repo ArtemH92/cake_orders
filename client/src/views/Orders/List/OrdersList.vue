@@ -1,7 +1,6 @@
 <script setup>
 import { useOrderStore } from '@/stores/orders';
 import { onMounted } from 'vue';
-import ListTitle from '@/components/ListTitle.vue';
 import TableOrders from './TableOrders.vue';
 import ConfirmModal from '@/components/modals/ConfirmModal.vue';
 import { ref, reactive } from 'vue';
@@ -42,7 +41,6 @@ const confirmModalHandler = () => {
 
 <template>
   <div>
-    <list-title url="/orders/add" btn-label="Создать заказ" title="Список заказов" />
     <StubTable v-if="loading" />
     <TableOrders
       v-else

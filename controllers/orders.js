@@ -24,7 +24,7 @@ const add = async (req, res) => {
   try {
     const data = req.body;
 
-    if (!data.dessert || !data.date || !data.time) {
+    if (!data.dessert || !data.dateTime) {
       return res.status(400).json({ message: "Все поля обязательные" });
     }
 

@@ -1,5 +1,3 @@
-import moment from "moment"
-
 export class CreateOrderData {
   constructor(data = {
     dessert: '',
@@ -7,8 +5,7 @@ export class CreateOrderData {
     cupcakesType: '',
     filling: '',
     quantity: null,
-    date: '',
-    time: '',
+    dateTime: '',
     status: '',
     notes: ''
   })
@@ -18,8 +15,7 @@ export class CreateOrderData {
     this.cupcakesType = data.cupcakesType
     this.filling = data.filling
     this.quantity = data.quantity
-    this.date = data.date
-    this.time = data.time
+    this.dateTime = data.dateTime
     this.status = data.status
     this.notes = data.notes
   }
@@ -33,8 +29,6 @@ export class AllOrders {
     cupcakesType: '',
     filling: '',
     quantity: null,
-    date: '',
-    time: '',
     dateTime: '',
     status: '',
     notes: ''
@@ -46,8 +40,7 @@ export class AllOrders {
     this.cupcakesType = data.cupcakesType
     this.filling = data.filling
     this.quantity = data.quantity
-    this.date = data.date
-    this.time = data.time
+    this.dateTime = data.dateTime
     this.statusTag = data.status === 'inProcessing' ? 'В обработке' : data.status === 'inProgress' ? 'Взяли в работу' : data.status === 'done' ? 'Заказ готов' : ''
     this.severityTag = data.status === 'inProcessing' ? 'secondary' : data.status === 'inProgress' ? 'warn' : data.status === 'done' ? 'success' : ''
     this.status = data.status
@@ -64,8 +57,6 @@ export class SingleOrder {
     cupcakesType: '',
     filling: '',
     quantity: null,
-    date: '',
-    time: '',
     dateTime: '',
     status: '',
     notes: ''
@@ -77,8 +68,7 @@ export class SingleOrder {
     this.cupcakesType = data.cupcakesType
     this.filling = data.filling
     this.quantity = +data.quantity
-    this.date = new Date(data.date)
-    this.time = new Date(data.time)
+    this.dateTime = new Date(data.dateTime)
     this.status = data.status
     this.notes = data.notes
   }
