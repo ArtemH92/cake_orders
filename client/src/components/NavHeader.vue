@@ -1,6 +1,5 @@
-<script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
-import moment from 'moment';
+<!-- <script setup lang="ts">
+import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import ModalWindow from './ModalWindow.vue';
 import CreateUser from './FormPopup/CreateUser.vue';
@@ -19,18 +18,6 @@ const handleModal = (modalState, modalName) => {
 
 getUser()
 
-const currentTime = ref(moment().format('YYYY-MM-DD HH:mm:ss'));
-let timer = null;
-
-onMounted(() => {
-  timer = setInterval(() => {
-    currentTime.value = moment().format('YYYY-MM-DD HH:mm:ss');
-  }, 1000);
-});
-
-onUnmounted(() => {
-  clearInterval(timer);
-});
 
 </script>
 
@@ -53,4 +40,21 @@ onUnmounted(() => {
       </ModalWindow>
     </div>
   </a-layout-header>
+</template> -->
+
+<script setup>
+import { onMounted } from 'vue';
+import { useAuthStore } from '@/stores/auth';
+import CurrentTime from './CurrentTime.vue';
+import DropDown from './DropdownMenu/DropDown.vue';
+
+const { getUser } = useAuthStore()
+onMounted(() => getUser())
+</script>
+
+<template>
+  <header class="fixed w-full z-10 shadow-md p-4 flex justify-between items-center bg-fuchsia-700" >
+    <CurrentTime />
+    <DropDown />
+  </header>
 </template>

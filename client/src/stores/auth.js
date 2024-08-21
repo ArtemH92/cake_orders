@@ -1,13 +1,17 @@
 import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue'
 import api from '@/api'
-import { message } from 'ant-design-vue'
+import { useRouter } from 'vue-router'
+import { computed } from 'vue'
 
 export const useAuthStore = defineStore('auth', () => {
   const users = reactive([])
   const user = reactive({})
   const token = ref(null)
   const error = ref(null)
+  const router = useRouter()
+  const loader = ref(false)
+
 
   const login = async (userData) => {
     await api
@@ -16,10 +20,10 @@ export const useAuthStore = defineStore('auth', () => {
         localStorage.setItem('token', response.data.token);
         Object.assign(user, response.data)
         token.value = response.data.token
-        message.success('Вы вошли в систему')
+        router.push('/')
       })
       .catch((err) => { 
-        message.error(err.response.data.message)
+        console.log(err.response.data.message)
       })
   }
 
@@ -33,6 +37,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const getUser = async () => {
+    loader.value = true
     await api
       .get('/users/current')
       .then((response) => {
@@ -40,7 +45,7 @@ export const useAuthStore = defineStore('auth', () => {
       })
       .catch((err) => {
         error.value = err.message
-      })
+      }).finally(() => loader.value = false)
   }
 
   const getUsers = async () => {
@@ -67,16 +72,19 @@ export const useAuthStore = defineStore('auth', () => {
   const removeUser = async (id) => {
     await api
       .post(`/users/remove/${id}`)
-      .then(() => message.success('Пользователь успешно удален'))
-      .catch((err) => message.error(err.response.data.message))
+      .then(() => console.log('Пользователь успешно удален'))
+      .catch((err) => console.log(err.response.data.message))
   }
 
   const logout = () => {
     localStorage.removeItem('token')
     Object.keys(user).forEach(key => delete user[key])
     token.value = null
-    message.success('Вы вышли из системы')
+    router.push('/login')
+    console.log('Вы вышли из системы')
   }
 
-  return { user, users, token, error, login, register, getUser, getUsers, editUser, removeUser, logout }
+  const loading = computed(() => loader)
+
+  return { user, users, token, error, loading, login, register, getUser, getUsers, editUser, removeUser, logout }
 })

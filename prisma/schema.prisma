@@ -29,9 +29,7 @@ model Order {
   cupcakesType   String?
   filling        String?
   quantity       Decimal?
-  photo          String?
-  date           DateTime
-  time           String 
+  dateTime       DateTime
   status         String 
   notes          String?
   createdAt      DateTime @default(now())
