@@ -31,7 +31,7 @@ const hendler = (data) => {
     </FloatLabel>
 
     <div class="flex justify-center mt-6">
-      <CustomButton :label="'Войти'" :icon="'login'" :type="'submit'"/>
+      <CustomButton :label="'Войти'" :type="'submit'"/>
     </div>
   </form>
 </template>

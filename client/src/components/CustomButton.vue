@@ -1,4 +1,4 @@
-<script setup>
+e<script setup>
 import Button from 'primevue/button';
 import GoogleIcon from './GoogleIcon.vue';
 

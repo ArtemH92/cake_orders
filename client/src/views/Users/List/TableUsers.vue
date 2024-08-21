@@ -14,7 +14,7 @@ const props = defineProps({
     <DataTable :value="props.users" size="small">
       <template #header>
         <PageTitle 
-          url="/orders/add" 
+          url="/users/add" 
           btn-label="Создать пользователя" 
           title="Список пользователей"
           mWidth="max-w-full"

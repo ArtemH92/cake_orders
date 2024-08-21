@@ -27,10 +27,10 @@ export const useAuthStore = defineStore('auth', () => {
       })
   }
 
-  const register = async (userData) => {
+  const register = async (userData, successModal) => {
     await api
       .post('/users/register', userData)
-      .then()
+      .then(() => successModal())
       .catch((err) => {
         error.value = err.message
       })

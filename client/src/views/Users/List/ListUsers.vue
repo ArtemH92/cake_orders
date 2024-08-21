@@ -2,6 +2,8 @@
 import { useAuthStore } from '@/stores/auth';
 import { onMounted } from 'vue';
 import TableUsers from './TableUsers.vue';
+import StubUsersList from './StubUsersList.vue';
+import ProgressSpinner from 'primevue/progressspinner';
 
 onMounted(() => getUsers())
 
@@ -11,7 +13,7 @@ const { users, user, loading, getUsers } = useAuthStore()
 <template>
   <div>
     <div v-if="loading">
-      LOADING...
+      <ProgressSpinner />
     </div>
     <div v-else>
       <div v-if="user.administrator">
@@ -19,7 +21,7 @@ const { users, user, loading, getUsers } = useAuthStore()
           :users="users"
         />
       </div>
-      <div v-else>Googbye</div>
+      <div v-else><StubUsersList /></div>
     </div>
   </div>
 </template>
