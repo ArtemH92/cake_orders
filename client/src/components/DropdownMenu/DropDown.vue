@@ -5,20 +5,29 @@ import Menu from 'primevue/menu';
 import Button from 'primevue/button';
 import ConfirmModal from '../modals/ConfirmModal.vue';
 import GoogleIcon from '../GoogleIcon.vue';
+import { useRouter } from 'vue-router';
 
 const { logout, user } = useAuthStore()
+const router = useRouter()
 
 const items = computed(() => ([
   ...(user.administrator ? [
     {
-      label: 'Список пользователей'
+      label: 'Список пользователей',
+      command: () => router.push('/users/list')
     },
     {
-      label: 'Добавить нового пользователя'
+      label: 'Добавить нового пользователя',
+      command: () => router.push('/users/add')
     }
   ] : []),
   {
-    label: 'Редактировать пользователя'
+    label: 'Редактировать пользователя',
+    command: () => router.push(`/users/edit/${user.id}`)
+  },
+  {
+    label: 'Список заказов',
+    command: () => router.push('/orders/list')
   },
   {
     label: 'Выйти',

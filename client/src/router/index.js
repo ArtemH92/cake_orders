@@ -19,18 +19,39 @@ const router = createRouter({
       children: [
         {
           path: 'list',
-          name: 'list',
+          name: 'orders-list',
           component: () => import('../views/Orders/List/OrdersList.vue'),
         },
         {
           path: 'add',
-          name: 'add',
+          name: 'order-add',
           component: () => import('../views/Orders/Add/CreateOrder.vue'),
         },
         {
           path: 'edit/:id',
-          name: 'edit',
+          name: 'order-edit',
           component: () => import('../views/Orders/Edit/EditOrder.vue'),
+        },
+      ]
+    },
+    {
+      path: '/users',
+      meta: { layout: 'auth', auth: true },
+      children: [
+        {
+          path: 'list',
+          name: 'users-list',
+          component: () => import('../views/Users/List/ListUsers.vue'),
+        },
+        {
+          path: 'add',
+          name: 'user-add',
+          component: () => import('../views/Users/Add/CreateUser.vue'),
+        },
+        {
+          path: 'edit/:id',
+          name: 'user-edit',
+          component: () => import('../views/Users/Edit/EditUser.vue'),
         },
       ]
     },
