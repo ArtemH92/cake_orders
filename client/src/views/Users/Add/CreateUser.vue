@@ -1,15 +1,16 @@
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import CreateUserForm from './CreateUserForm.vue';
-import PageTitle from '@/components/PageTitle.vue';
-import SuccessModal from '@/components/modals/SuccessModal.vue';
-import { useAuthStore } from '@/stores/auth';
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import CreateUserForm from './CreateUserForm.vue'
+import PageTitle from '@/components/PageTitle.vue'
+import SuccessModal from '@/components/modals/SuccessModal.vue'
+import StubUsersList from '../List/StubUsersList.vue'
 
 const router = useRouter()
 const modalVisible = ref(false)
 
-const { register } = useAuthStore()
+const { register, user } = useAuthStore()
 
 const modalHandler = () => {
   modalVisible.value = true
@@ -18,12 +19,23 @@ const modalHandler = () => {
 
 <template>
   <div>
-    <PageTitle url="/users/list" btn-label="Вернуться к списку пользователей" title="Создание пользователя" />
-    <div class="flex justify-center mt-5">
-      <div class="bg-white rounded-md p-7">
-        <CreateUserForm @finish="(data) => register(data, modalHandler)"/>
+    <div v-if="user.administrator">
+      <PageTitle
+        url="/users/list"
+        btn-label="Вернуться к списку пользователей"
+        title="Создание пользователя"
+      />
+      <div class="flex justify-center mt-5">
+        <div class="bg-white rounded-md p-7">
+          <CreateUserForm @finish="(data) => register(data, modalHandler)" />
+        </div>
       </div>
+      <SuccessModal
+        v-model="modalVisible"
+        @confirm="router.push('/users/list')"
+        operation="Пользователь успешно создан"
+      />
     </div>
-    <SuccessModal v-model="modalVisible" @confirm="router.push('/users/list')" operation="Пользователь успешно создан" />
+    <div v-else><StubUsersList /></div>
   </div>
 </template>

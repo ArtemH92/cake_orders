@@ -1,7 +1,5 @@
 <script setup>
 import GoogleIcon from '@/components/GoogleIcon.vue';
-
-
 </script>
 
 <template>
