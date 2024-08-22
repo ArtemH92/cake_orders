@@ -6,9 +6,8 @@ import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
 import { LoginData } from '@/models/login';
 
-const emit = defineEmits(['submit'])
-
 const userInfo = reactive(new LoginData)
+const emit = defineEmits(['submit'])
 
 const hendler = (data) => {
   emit('submit', data)

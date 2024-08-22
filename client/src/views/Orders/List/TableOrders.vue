@@ -72,7 +72,7 @@ const emit = defineEmits(['remove', 'edit', 'status'])
 
       <Column header="Статус заказа" class="w-1/5">
         <template #body="slotProps">
-          <Tag :value="slotProps.data.statusTag" :severity="slotProps.data.severityTag" />
+          <Tag :value="slotProps.data.statusTag" :severity="slotProps.data.severityTag" :icon="slotProps.data.severityTag === 'secondary' ? 'pi pi-spin pi-spinner' : ''"/>
         </template>
       </Column>
     </DataTable>
