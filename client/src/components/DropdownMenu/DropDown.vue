@@ -46,7 +46,7 @@ const toggle = (event) => {
   <div class="flex items-center">
     <span class="text-white pr-2">{{ user.username }}</span>
     <Button severity="help" type="button" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" size="small" rounded>
-      <GoogleIcon icon="account_circle" />
+      <GoogleIcon icon="account_circle" color="text-white" />
     </Button>
     <Menu ref="menu" id="overlay_menu" :popup="true" :model="items"></Menu>
     <ConfirmModal v-model="confirmModalVisible" @confirm="logout()" @cancel="confirmModalVisible = false"/>
