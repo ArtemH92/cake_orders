@@ -4,6 +4,7 @@ import api from '@/api'
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
 import { EditGetUserData } from '@/models/users'
+import { useToast } from 'primevue/usetoast'
 
 export const useAuthStore = defineStore('auth', () => {
   const users = reactive([])
@@ -12,6 +13,7 @@ export const useAuthStore = defineStore('auth', () => {
   const error = ref(null)
   const router = useRouter()
   const loader = ref(false)
+  const toast = useToast()
 
   const login = async (userData) => {
     await api
@@ -23,7 +25,7 @@ export const useAuthStore = defineStore('auth', () => {
         router.push('/')
       })
       .catch((err) => { 
-        console.log(err.response.data.message)
+        toast.add({ severity: 'error', summary: 'Ошибка!', detail: err.response.data.message, life: 3000 })
       })
   }
 
