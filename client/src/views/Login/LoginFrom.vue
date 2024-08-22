@@ -21,12 +21,12 @@ const hendler = (data) => {
     @submit.prevent="hendler(userInfo)"
   >
     <FloatLabel class="mt-6">
-      <InputText v-model="userInfo.username" id="username"/>
+      <InputText v-model="userInfo.username" id="username" class="w-full" />
       <label for="username">Имя пользователя</label>
     </FloatLabel>
 
     <FloatLabel class="mt-6">
-      <Password :feedback="false" v-model="userInfo.password" id="password" />
+      <Password :feedback="false" v-model="userInfo.password" id="password" toggleMask  />
       <label for="password">Пароль</label>
     </FloatLabel>
 

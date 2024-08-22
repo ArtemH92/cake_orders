@@ -3,6 +3,7 @@ import { reactive, ref } from 'vue'
 import api from '@/api'
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
+import { EditGetUserData } from '@/models/users'
 
 export const useAuthStore = defineStore('auth', () => {
   const users = reactive([])
@@ -11,7 +12,6 @@ export const useAuthStore = defineStore('auth', () => {
   const error = ref(null)
   const router = useRouter()
   const loader = ref(false)
-
 
   const login = async (userData) => {
     await api
@@ -41,7 +41,7 @@ export const useAuthStore = defineStore('auth', () => {
     await api
       .get('/users/current')
       .then((response) => {
-        Object.assign(user, response.data)
+        Object.assign(user, new EditGetUserData(response.data))
       })
       .catch((err) => {
         error.value = err.message
@@ -57,11 +57,12 @@ export const useAuthStore = defineStore('auth', () => {
       .catch((err) => error.value = err.message)
   }
 
-  const editUser = async (id, data) => {
+  const editUser = async (id, data, successModal) => {
     await api
       .put(`/users/current/edit/${id}`, data)
       .then((response) => {
         Object.assign(user, response.data)
+        successModal()
         getUser()
       })
       .catch((err) => {
