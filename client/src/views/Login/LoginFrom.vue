@@ -1,14 +1,11 @@
 <script setup>
-import { reactive } from 'vue'
 import CustomButton from '@/components/CustomButton.vue'
 import FloatLabel from 'primevue/floatlabel'
 import InputText from 'primevue/inputtext'
 import Password from 'primevue/password'
-import { LoginData } from '@/models/login'
-import { schemaLogin } from '@/components/schemas'
+import { schemaLogin } from '@/models/schemas'
 import { useForm } from 'vee-validate'
 
-const userInfo = reactive(new LoginData())
 const emit = defineEmits(['submit'])
 
 const { defineField, handleSubmit, errors } = useForm({
@@ -24,7 +21,7 @@ const hendler = handleSubmit((data) => {
 </script>
 
 <template>
-  <form autocomplete="off" @submit.prevent="hendler(userInfo)">
+  <form autocomplete="off" @submit.prevent="hendler()">
     <FloatLabel class="mt-6">
       <InputText
         v-model="username"
