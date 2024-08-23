@@ -1,26 +1,3 @@
-export class CreateOrderData {
-  constructor(data = {
-    dessert: '',
-    cakeType: '',
-    cupcakesType: '',
-    filling: '',
-    quantity: null,
-    dateTime: '',
-    status: '',
-    notes: ''
-  })
-  {
-    this.dessert = data.dessert
-    this.cakeType = data.cakeType
-    this.cupcakesType = data.cupcakesType
-    this.filling = data.filling
-    this.quantity = data.quantity
-    this.dateTime = data.dateTime
-    this.status = data.status
-    this.notes = data.notes
-  }
-}
-
 export class AllOrders {
   constructor(data = {
     id: '',

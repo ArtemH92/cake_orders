@@ -59,3 +59,18 @@ export const schemaEditOrder = yup.object({
   status: yup.string(),
   notes: yup.string(),
 });
+
+export const schemaUser = yup.object({
+  username: yup.string().required('Это обязательное поле'),
+  password: yup
+    .string()
+    .required('Это обязательное поле')
+    .min(6, 'Пароль должен содержать не менее 6 символов'),
+  confirmPassword: yup
+    .string()
+    .required('Это обязательное поле')
+    .oneOf([yup.ref('password')], 'Пароли не совпадают'),
+  administrator: yup.boolean(),
+  phone: yup
+    .string()
+});
