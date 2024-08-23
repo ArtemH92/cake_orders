@@ -6,7 +6,8 @@ const model = defineModel()
 const props = defineProps({
   errors: String,
   label: String,
-  minDate: Date
+  minDate: Date,
+  disabled: Boolean
 })
 </script>
 
@@ -21,6 +22,7 @@ const props = defineProps({
         showTime
         hourFormat="24"
         date-format="dd mm yy"
+        :disabled="props.disabled"
       />
       <label>{{ props.label }}</label>
     </FloatLabel>

@@ -6,7 +6,7 @@ const model = defineModel()
 const props = defineProps({
   errors: String,
   label: String,
-  minValue: Number
+  disabled: Boolean
 })
 </script>
 
@@ -16,8 +16,8 @@ const props = defineProps({
       <InputNumber
         v-model="model"
         :invalid="errors != ''"
-        :min="props.minValue"
         :aria-describedby="`${model}-error`"
+        :disabled="props.disabled"
       />
       <label>{{ props.label }}</label>
     </FloatLabel>
