@@ -8,9 +8,8 @@ import DatePicker from 'primevue/datepicker'
 import CustomButton from '@/components/CustomButton.vue'
 import { Choices } from '@/lib/choicesSelect'
 
-
 const { dessertChoice, cakeTypeChoice, cupcakesTypeChoice, fillingChoice } = Choices
-const emit = defineEmits(['finish'])
+const emit = defineEmits(['finish', 'cancel'])
 const props = defineProps({
   data: Object
 })
@@ -18,14 +17,30 @@ const orderData = reactive(props.data)
 
 const disabled = ref(true)
 
+const ChangeHandler = (data) => {
+  if (data.dessert === 'cake') {
+    data.cupcakesType = ''
+    data.filling = ''
+    data.quantity = null
+  }
+
+  if (data.dessert === 'cupcake') {
+    data.cakeType = ''
+  }
+}
 
 const date = ref(new Date());
 date.value.setDate(date.value.getDate() + 3)
+
+const cancel = () => {
+  disabled.value = true
+  emit('cancel')
+}
 </script>
 
 <template>
   <div class="bg-white rounded-md p-7">
-    <form autocomplete="off" @submit.prevent="emit('finish', orderData)">
+    <form autocomplete="off" @submit.prevent="emit('finish', orderData)" @reset="cancel">
       <FloatLabel>
         <Select
           v-model="orderData.dessert"
@@ -94,7 +109,7 @@ date.value.setDate(date.value.getDate() + 3)
         <CustomButton label="Редактировать" v-if="disabled" @click="disabled = false" />
         <div v-else class="w-full flex justify-between">
           <CustomButton label="Сохранить" type="submit" />
-          <CustomButton label="Отмена" @click="disabled = true" />
+          <CustomButton label="Отмена" type="reset" />
         </div>
       </div>
     </form>
