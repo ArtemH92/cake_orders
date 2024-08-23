@@ -28,15 +28,15 @@ const modalHandler = () => {
       title="Редактирование заказа"
     />
     <div class="flex justify-center mt-5">
-      <div class="bg-white rounded-md p-7" v-if="loading">
-        <ProgressSpinner />
+      <div class="bg-white rounded-md p-7">
+        <ProgressSpinner v-if="loading" />
+        <EditOrderForm
+          v-else
+          :data="order"
+          @finish="(data) => editOrder(data.id, data, modalHandler)"
+          @cancel="getOrder(route.params.id)"
+        />
       </div>
-      <EditOrderForm
-        v-else
-        :data="order"
-        @finish="(data) => editOrder(data.id, data, modalHandler)"
-        @cancel="getOrder(route.params.id)"
-      />
     </div>
     <Toast />
     <SuccessModal

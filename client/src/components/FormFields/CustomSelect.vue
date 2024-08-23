@@ -6,7 +6,8 @@ const model = defineModel()
 const props = defineProps({
   options: Object,
   errors: String,
-  label: String
+  label: String,
+  disabled: Boolean
 })
 const emit = defineEmits(['changeField'])
 </script>
@@ -24,6 +25,7 @@ const emit = defineEmits(['changeField'])
         :invalid="errors != ''"
         class="w-full md:w-52"
         @change="emit('changeField')"
+        :disabled="props.disabled"
       />
       <label>{{ props.label }}</label>
     </FloatLabel>
