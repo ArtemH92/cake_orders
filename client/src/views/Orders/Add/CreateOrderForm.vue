@@ -16,15 +16,15 @@ const { defineField, handleSubmit, errors } = useForm({
   validationSchema: schemaCreateOrder
 })
 
-const [dessert] = defineField('dessert')
-const [cakeType] = defineField('cakeType')
-const [cupcakesType] = defineField('cupcakesType')
-const [filling] = defineField('filling')
-const [quantity] = defineField('quantity')
-const [dateTime] = defineField('dateTime')
-const [notes] = defineField('notes')
-
-const formData = reactive({ dessert, cakeType, cupcakesType, filling, quantity, dateTime, notes })
+const formData = reactive({
+  dessert: defineField('dessert')[0],
+  cakeType: defineField('cakeType')[0],
+  cupcakesType: defineField('cupcakesType')[0],
+  filling: defineField('filling')[0],
+  quantity: defineField('quantity')[0],
+  dateTime: defineField('dateTime')[0],
+  notes: defineField('notes')[0],
+})
 
 const ChangeHandler = (dessert) => {
   if (dessert === 'cake') {
@@ -88,7 +88,6 @@ date.value.setDate(date.value.getDate() + 3)
     <CustomInputNumber
       v-if="formData.dessert === 'cupcake'"
       v-model="formData.quantity"
-      :min-value="9"
       :errors="!errors.quantity ? '' : errors.quantity"
       class="mt-6"
       label="Количество"
