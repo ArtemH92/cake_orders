@@ -25,9 +25,9 @@ const emit = defineEmits(['remove', 'edit', 'status'])
       size="small"
     >
       <template #header>
-        <PageTitle 
-          url="/orders/add" 
-          btn-label="Создать заказ" 
+        <PageTitle
+          url="/orders/add"
+          btn-label="Создать заказ"
           title="Список заказов"
           mWidth="max-w-full"
           colorTitle="text-black"
@@ -47,32 +47,36 @@ const emit = defineEmits(['remove', 'edit', 'status'])
 
       <Column header="Действие" class="w-2/5">
         <template #body="slotProps">
-          <CustomButton
-            label="Удалить"
-            severity="danger"
-            @click="emit('remove', slotProps.data)"
-            size="small"
-          />
-          <CustomButton
-            label="Редактировать"
-            class="ml-6"
-            @click="emit('edit', slotProps.data)"
-            size="small"
-          />
-          <CustomButton
-            :label="slotProps.data.labelStatusBtn"
-            v-if="slotProps.data.status != 'done'"
-            :severity="slotProps.data.severityTag"
-            class="ml-6"
-            @click="emit('status', slotProps.data)"
-            size="small"
-          />
+          <div class="flex flex-wrap gap-2">
+            <CustomButton
+              label="Удалить"
+              severity="danger"
+              @click="emit('remove', slotProps.data)"
+              size="small"
+            />
+            <CustomButton
+              label="Редактировать"
+              @click="emit('edit', slotProps.data)"
+              size="small"
+            />
+            <CustomButton
+              :label="slotProps.data.labelStatusBtn"
+              v-if="slotProps.data.status != 'done'"
+              :severity="slotProps.data.severityTag"
+              @click="emit('status', slotProps.data)"
+              size="small"
+            />
+          </div>
         </template>
       </Column>
 
       <Column header="Статус заказа" class="w-1/5">
         <template #body="slotProps">
-          <Tag :value="slotProps.data.statusTag" :severity="slotProps.data.severityTag" :icon="slotProps.data.severityTag === 'secondary' ? 'pi pi-spin pi-spinner' : ''"/>
+          <Tag
+            :value="slotProps.data.statusTag"
+            :severity="slotProps.data.severityTag"
+            :icon="slotProps.data.severityTag === 'secondary' ? 'pi pi-spin pi-spinner' : ''"
+          />
         </template>
       </Column>
     </DataTable>

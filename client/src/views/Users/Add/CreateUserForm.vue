@@ -1,40 +1,62 @@
 <script setup>
 import { reactive } from 'vue';
-import { CreateUserData } from '@/models/users';
-import FloatLabel from 'primevue/floatlabel';
-import InputText from 'primevue/inputtext';
-import Password from 'primevue/password';
+import { schemaUser } from '@/models/schemas'
+import { useForm } from 'vee-validate'
 import Checkbox from 'primevue/checkbox';
 import CustomButton from '@/components/CustomButton.vue';
-import { vMaska } from 'maska'
+import CustomInputText from '@/components/FormFields/CustomInputText.vue'
+import CustomInputPassword from '@/components/FormFields/CustomInputPassword.vue'
+import CustomInputMask from '@/components/FormFields/CustomInputMask.vue'
 
 const emit = defineEmits(['finish'])
 
-const userData = reactive(new CreateUserData())
+const { defineField, handleSubmit, errors } = useForm({
+  validationSchema: schemaUser
+})
+
+const userData = reactive({
+  username: defineField('username')[0],
+  password: defineField('password')[0],
+  confirmPassword: defineField('confirmPassword')[0],
+  administrator: defineField('administrator')[0],
+  phone: defineField('phone')[0],
+})
+
+const finish = handleSubmit((data) => {
+  emit('finish', data)
+})
 </script>
 
 <template>
   <div>
-    <form autocomplete="off" @submit.prevent="emit('finish', userData)">
-      <FloatLabel>
-        <InputText v-model="userData.username" class="w-full" />
-        <label>Имя пользователя</label>
-      </FloatLabel> 
+    <form autocomplete="off" @submit.prevent="finish()">
+      <CustomInputText 
+        v-model="userData.username"
+        label="Имя пользователя"
+        :errors="!errors.username ? '' : errors.username"
+      />
 
-      <FloatLabel class="mt-6">
-        <Password v-model="userData.password" :feedback="false" toggleMask />
-        <label>Пароль</label>
-      </FloatLabel> 
+      <CustomInputPassword 
+        class="mt-6"
+        v-model="userData.password"
+        label="Пароль"
+        :errors="!errors.password ? '' : errors.password"
+      />
 
-      <FloatLabel class="mt-6">
-        <Password v-model="userData.confirmPassword" :feedback="false" toggleMask />
-        <label>Повторите пароль</label>
-      </FloatLabel> 
+      <CustomInputPassword 
+        class="mt-6"
+        v-model="userData.confirmPassword"
+        label="Повторите пароль"
+        :errors="!errors.confirmPassword ? '' : errors.confirmPassword"
+      />
 
-      <FloatLabel class="mt-6">
-        <InputText v-model="userData.phone" v-maska data-maska="+375 (##) ### ## ##" class="w-full" />
-        <label>Номер телефона</label>
-      </FloatLabel> 
+      <CustomInputMask 
+        class="mt-6"
+        v-model="userData.phone"
+        label="Номер телефона"
+        :errors="!errors.phone ? '' : errors.phone"
+        maska="+375 (##) ### ## ##"
+      />
 
       <div class="mt-6 w-full flex justify-between">
         <label for="admin">Права администратора</label>
