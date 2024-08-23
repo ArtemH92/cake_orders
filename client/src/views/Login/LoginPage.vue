@@ -18,8 +18,8 @@ const hendleSubmit = (data) => {
       <h3 class="text-center">Авторизация</h3>
     </template>
     <template #content>
-      <Toast />
       <LoginFrom @submit="(data) => hendleSubmit(data)"/>
+      <Toast />
     </template>
   </Card>
 </template>
