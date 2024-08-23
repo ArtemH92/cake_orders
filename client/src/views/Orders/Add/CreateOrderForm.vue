@@ -1,78 +1,108 @@
 <script setup>
-import { reactive, ref } from 'vue';
-import FloatLabel from 'primevue/floatlabel';
-import InputNumber from 'primevue/inputnumber';
-import Select from 'primevue/select';
-import Textarea from 'primevue/textarea';
-import DatePicker from 'primevue/datepicker';
-import CustomButton from '@/components/CustomButton.vue';
-import { Choices } from '@/lib/choicesSelect';
-import { CreateOrderData } from '@/models/order';
+import { ref, reactive } from 'vue'
+import { Choices } from '@/lib/choicesSelect'
+import { useForm } from 'vee-validate'
+import { schemaCreateOrder } from '@/models/schemas'
+import CustomInputNumber from '@/components/FormFields/CustomInputNumber.vue'
+import CustomSelect from '@/components/FormFields/CustomSelect.vue'
+import CustomButton from '@/components/CustomButton.vue'
+import CustomDatePicker from '@/components/FormFields/CustomDatePicker.vue'
+import CustomTextarea from '@/components/FormFields/CustomTextarea.vue'
 
 const emit = defineEmits(['finish'])
 const { dessertChoice, cakeTypeChoice, cupcakesTypeChoice, fillingChoice } = Choices
-const orderData = reactive(new CreateOrderData)
 
-const ChangeHandler = (data) => {
-  if (data.dessert.code === 'cake') {
-    data.cupcakesType = ''
-    data.filling = ''
-    data.quantity = null
+const { defineField, handleSubmit, errors } = useForm({
+  validationSchema: schemaCreateOrder
+})
+
+const [dessert] = defineField('dessert')
+const [cakeType] = defineField('cakeType')
+const [cupcakesType] = defineField('cupcakesType')
+const [filling] = defineField('filling')
+const [quantity] = defineField('quantity')
+const [dateTime] = defineField('dateTime')
+const [notes] = defineField('notes')
+
+const formData = reactive({ dessert, cakeType, cupcakesType, filling, quantity, dateTime, notes })
+
+const ChangeHandler = (dessert) => {
+  if (dessert === 'cake') {
+    formData.cupcakesType = ''
+    formData.filling = ''
+    formData.quantity = null
   }
 
-  if (data.dessert.code === 'cupcake') {
-    data.cakeType = ''
+  if (dessert === 'cupcake') {
+    formData.cakeType = ''
   }
 }
-const finish = (data) => {
+
+const finish = handleSubmit((data) => {
   const order = data
   order.status = 'inProcessing'
   emit('finish', order)
-}
+})
 
-const date = ref(new Date());
+const date = ref(new Date())
 date.value.setDate(date.value.getDate() + 3)
 </script>
 
 <template>
-  <form
-    autocomplete="off"
-    @submit.prevent="finish(orderData)"
-  >
-    <FloatLabel>
-      <Select v-model="orderData.dessert" :options="dessertChoice" optionLabel="label" optionValue="value" class="w-full md:w-52" @change="ChangeHandler(orderData)" />
-      <label>Изделие</label>
-    </FloatLabel>
+  <form autocomplete="off" @submit.prevent="finish()">
+    <CustomSelect
+      v-model="formData.dessert"
+      :options="dessertChoice"
+      :errors="!errors.dessert ? '' : errors.dessert"
+      label="Изделие"
+      @changeField="ChangeHandler(formData.dessert)"
+    />
 
-    <FloatLabel class="mt-6" v-if="orderData.dessert === 'cake'">
-      <Select v-model="orderData.cakeType" :options="cakeTypeChoice" optionLabel="label" optionValue="value" class="w-full md:w-52" />
-      <label>Торт</label>
-    </FloatLabel>
+    <CustomSelect
+      class="mt-6"
+      v-if="formData.dessert === 'cake'"
+      v-model="formData.cakeType"
+      :options="cakeTypeChoice"
+      :errors="!errors.cakeType ? '' : errors.cakeType"
+      label="Торт"
+    />
 
-    <FloatLabel class="mt-6" v-if="orderData.dessert === 'cupcake'">
-      <Select v-model="orderData.cupcakesType" :options="cupcakesTypeChoice" optionLabel="label" optionValue="value" class="w-full md:w-52" />
-      <label>Капкейк</label>
-    </FloatLabel>
+    <CustomSelect
+      class="mt-6"
+      v-if="formData.dessert === 'cupcake'"
+      v-model="formData.cupcakesType"
+      :options="cupcakesTypeChoice"
+      :errors="!errors.cupcakesType ? '' : errors.cupcakesType"
+      label="Капкейк"
+    />
 
-    <FloatLabel class="mt-6" v-if="orderData.dessert === 'cupcake'">
-      <Select v-model="orderData.filling" :options="fillingChoice" optionLabel="label" optionValue="value" class="w-full md:w-52" />
-      <label>Начинка</label>
-    </FloatLabel>
+    <CustomSelect
+      class="mt-6"
+      v-if="formData.dessert === 'cupcake'"
+      v-model="formData.filling"
+      :options="fillingChoice"
+      :errors="!errors.filling ? '' : errors.filling"
+      label="Начинка"
+    />
 
-    <FloatLabel class="mt-6" v-if="orderData.dessert === 'cupcake'">
-      <InputNumber v-model="orderData.quantity" :min="9" />
-      <label>Количество</label>
-    </FloatLabel>
+    <CustomInputNumber
+      v-if="formData.dessert === 'cupcake'"
+      v-model="formData.quantity"
+      :min-value="9"
+      :errors="!errors.quantity ? '' : errors.quantity"
+      class="mt-6"
+      label="Количество"
+    />
 
-    <FloatLabel class="mt-6">
-      <DatePicker v-model="orderData.dateTime" date-format="dd mm yy" :min-date="date" showTime hourFormat="24"/>
-      <label>Дата и время</label>
-    </FloatLabel>
+    <CustomDatePicker 
+      class="mt-6"
+      v-model="formData.dateTime"
+      :errors="!errors.dateTime ? '' : errors.dateTime"
+      :min-date="date"
+      label="Дата и время"
+    />
 
-    <FloatLabel class="mt-6">
-      <Textarea v-model="orderData.notes" cols="25" :autoResize="true" />
-      <label>Примечания</label>
-    </FloatLabel>
+    <CustomTextarea v-model="formData.notes" class="mt-6" label="Примечания" />
 
     <div class="mt-6 flex justify-center">
       <CustomButton label="Создать" type="submit" />
