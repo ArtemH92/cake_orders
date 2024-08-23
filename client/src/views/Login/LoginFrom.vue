@@ -56,7 +56,7 @@ const hendler = handleSubmit((data) => {
     </small>
 
     <div class="flex justify-center mt-6">
-      <CustomButton :label="'Войти'" :type="'submit'" />
+      <CustomButton :label="'Войти'" :type="'submit'" icon="pi pi-sign-in" icon-pos="right" />
     </div>
   </form>
 </template>
