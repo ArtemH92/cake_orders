@@ -14,16 +14,16 @@ function createDefaultUser() {
 
     try {
       const existingUser = await prisma.user.findUnique({
-        where: { username: user.username },
+        where: { username: process.env.SUPER_USER_NAME },
       });
 
       if (!existingUser) {
-        const hashedPassword = await bcrypt.hash(user.password, 10);
+        const hashedPassword = await bcrypt.hash(process.env.SUPER_USER_PASSWORD, 10);
         await prisma.user.create({
           data: {
-            username: user.username,
+            username: process.env.SUPER_USER_NAME,
             password: hashedPassword,
-            administrator: user.administrator,
+            administrator: process.env.SUPER_USER,
           },
         });
         console.log('Default user created successfully');
