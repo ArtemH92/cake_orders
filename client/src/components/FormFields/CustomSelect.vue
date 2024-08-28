@@ -5,7 +5,10 @@ import Select from 'primevue/select';
 const model = defineModel()
 const props = defineProps({
   options: Object,
-  errors: String,
+  errors: {
+    type: String,
+    default: ''
+  },
   label: String,
   disabled: Boolean
 })

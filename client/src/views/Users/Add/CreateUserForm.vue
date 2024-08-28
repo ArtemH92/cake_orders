@@ -36,6 +36,14 @@ const finish = handleSubmit((data) => {
         :errors="!errors.username ? '' : errors.username"
       />
 
+      <CustomInputMask 
+        class="mt-6"
+        v-model="userData.phone"
+        label="Номер телефона"
+        :errors="!errors.phone ? '' : errors.phone"
+        maska="+375 (##) ### ## ##"
+      />
+
       <CustomInputPassword 
         class="mt-6"
         v-model="userData.password"
@@ -48,14 +56,6 @@ const finish = handleSubmit((data) => {
         v-model="userData.confirmPassword"
         label="Повторите пароль"
         :errors="!errors.confirmPassword ? '' : errors.confirmPassword"
-      />
-
-      <CustomInputMask 
-        class="mt-6"
-        v-model="userData.phone"
-        label="Номер телефона"
-        :errors="!errors.phone ? '' : errors.phone"
-        maska="+375 (##) ### ## ##"
       />
 
       <div class="mt-6 w-full flex justify-between">

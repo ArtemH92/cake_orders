@@ -74,3 +74,15 @@ export const schemaUser = yup.object({
   phone: yup
     .string()
 });
+
+export const schemaEditUser = yup.object({
+  id: yup.string(),
+  username: yup.string().required('Это обязательное поле'),
+  password: yup.string(),
+  confirmPassword: yup
+    .string()
+    .required('Это обязательное поле')
+    .oneOf([yup.ref('password')], 'Пароли не совпадают'),
+  administrator: true,
+  phone: yup.string(),
+});

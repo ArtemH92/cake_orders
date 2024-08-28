@@ -4,7 +4,10 @@ import InputNumber from 'primevue/inputnumber';
 
 const model = defineModel()
 const props = defineProps({
-  errors: String,
+  errors: {
+    type: String,
+    default: ''
+  },
   label: String,
   disabled: Boolean
 })

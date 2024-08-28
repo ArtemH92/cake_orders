@@ -40,12 +40,14 @@ export class EditUserData {
   constructor(data = {
     id: '',
     username: '',
+    password: '',
     phone: '',
     administrator: false,
   })
   {
     this.id = data.id
     this.username = data.username
+    this.password = data.password
     this.phone = data.phone
     this.administrator = data.administrator
   }

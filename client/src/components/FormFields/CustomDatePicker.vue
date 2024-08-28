@@ -4,7 +4,10 @@ import DatePicker from 'primevue/datepicker';
 
 const model = defineModel()
 const props = defineProps({
-  errors: String,
+  errors: {
+    type: String,
+    default: ''
+  },
   label: String,
   minDate: Date,
   disabled: Boolean

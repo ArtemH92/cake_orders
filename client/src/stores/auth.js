@@ -70,6 +70,7 @@ export const useAuthStore = defineStore('auth', () => {
       .catch((err) => {
         error.value = err.message
       })
+      
   }
 
   const removeUser = async (id) => {

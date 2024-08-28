@@ -135,22 +135,28 @@ const getUsers = async (req, res) => {
 const editUser = async (req, res) => {
   const data = req.body;
   const id = data.id;
-
+  
   if (!id) {
     return res.status(400).json({ message: "ID пользователя не указан" });
   }
 
   try {
+    if (data.password) {
+      const salt = await brypt.genSalt(10);
+      const hashedPassword = await brypt.hash(data.password, salt);
+      data.password = hashedPassword;
+    }
+
     await prisma.user.update({
       where: {
         id,
       },
-      data,
+      data
     });
 
     res.status(204).json("OK");
   } catch(err) {
-    res.status(500).json({ message: "Не удалось редактировать заказ" });
+    res.status(500).json({ message: "Не удалось редактировать заказ" + err });
   }
 };
 
@@ -160,7 +166,7 @@ const editUser = async (req, res) => {
  * @access Private
  */
 const removeUser = async (req, res) => {
-  const { id } = req.body;
+  const id = req.body.id;
 
   try {
     await prisma.user.delete({

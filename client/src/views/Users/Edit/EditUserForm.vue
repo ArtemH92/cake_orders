@@ -1,10 +1,9 @@
 <script setup>
 import { reactive, ref } from 'vue';
-import { EditUserData } from '@/models/users';
-import FloatLabel from 'primevue/floatlabel';
-import InputText from 'primevue/inputtext';
 import CustomButton from '@/components/CustomButton.vue';
-import { vMaska } from 'maska'
+import CustomInputText from '@/components/FormFields/CustomInputText.vue'
+import CustomInputMask from '@/components/FormFields/CustomInputMask.vue'
+import CustomInputPassword from '@/components/FormFields/CustomInputPassword.vue'
 
 const emit = defineEmits(['finish', 'cancel'])
 const props = defineProps({
@@ -13,34 +12,50 @@ const props = defineProps({
 const userData = reactive(props.data)
 
 const disabled = ref(true)
+const finish = () => {
+  emit('finish', userData)
+}
 const cancelEdit = () => {
   disabled.value = true
   emit('cancel')
+}
+
+const changePassword = {
+  password: '',
+  confirmPassword: ''
 }
 </script>
 
 <template>
   <div>
-    <form autocomplete="off" @submit.prevent="emit('finish', new EditUserData(userData))">
-      <FloatLabel>
-        <InputText v-model="userData.username" :disabled="disabled"/>
-        <label>Имя пользователя</label>
-      </FloatLabel> 
+    <form autocomplete="off" @submit.prevent="finish()">
+      <CustomInputText 
+        v-model="userData.username"
+        :disabled="disabled"
+        label="Имя пользователя"
+      />
 
-      <!-- <FloatLabel class="mt-6">
-        <Password v-model="userData.password" :feedback="false" />
-        <label>Пароль</label>
-      </FloatLabel> 
+      <CustomInputMask 
+        class="mt-6"
+        v-model="userData.phone"
+        label="Номер телефона"
+        maska="+375 (##) ### ## ##"
+        :disabled="disabled"
+      />
+      
+      <CustomInputPassword 
+        class="mt-6"
+        v-model="changePassword.password"
+        label="Пароль"
+        :disabled="disabled"
+      />
 
-      <FloatLabel class="mt-6">
-        <Password v-model="userData.confirmPassword" :feedback="false" />
-        <label>Повторите пароль</label>
-      </FloatLabel>  -->
-
-      <FloatLabel class="mt-6">
-        <InputText v-model="userData.phone" v-maska data-maska="+375 (##) ### ## ##" :disabled="disabled" />
-        <label>Номер телефона</label>
-      </FloatLabel> 
+      <CustomInputPassword 
+        class="mt-6"
+        v-model="changePassword.confirmPassword"
+        label="Повторите пароль"
+        :disabled="disabled"
+      />
 
       <div class="mt-6 flex justify-center">
         <CustomButton label="Редактировать" @click="disabled = false" v-if="disabled" />

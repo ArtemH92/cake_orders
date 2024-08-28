@@ -6,7 +6,10 @@ const model = defineModel()
 const props = defineProps({
   label: String,
   disabled: Boolean,
-  errors: String
+  errors: {
+    type: String,
+    default: ''
+  },
 })
 </script>
 
