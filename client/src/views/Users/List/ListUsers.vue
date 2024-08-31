@@ -7,7 +7,11 @@ import ProgressSpinner from 'primevue/progressspinner';
 
 onMounted(() => getUsers())
 
-const { users, user, loading, getUsers } = useAuthStore()
+const { users, user, loading, getUsers, removeUser } = useAuthStore()
+
+const deleteUserHandler = (id) => {
+  removeUser(id)
+}
 </script>
 
 <template>
@@ -19,6 +23,7 @@ const { users, user, loading, getUsers } = useAuthStore()
       <div v-if="user.administrator">
         <TableUsers
           :users="users"
+          @delete-user="(id) => deleteUserHandler(id)"
         />
       </div>
       <div v-else><StubUsersList /></div>

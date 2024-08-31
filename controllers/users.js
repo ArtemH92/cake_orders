@@ -160,18 +160,18 @@ const editUser = async (req, res) => {
  * @access Private
  */
 const removeUser = async (req, res) => {
-  const { id } = req.body;
-
+  const { id }  = req.user;
+  
   try {
     await prisma.user.delete({
       where: {
-        id,
+        id: id,
       },
     });
 
     res.status(204).json("OK");
-  } catch {
-    res.status(500).json({ message: "Не удалось удалить заказ" });
+  } catch(err) {
+    res.status(500).json({ message: "Не удалось удалить пользователя" + err});
   }
 };
 
