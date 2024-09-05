@@ -4,6 +4,5 @@ JWT_SECRET = "" (generate jwt secret)
 
 SUPER_USER_NAME = '' (add name)
 SUPER_USER_PASSWORD = '' (add password)
-SUPER_USER = true
 
 DATABASE_URL="file:./dev.db"
