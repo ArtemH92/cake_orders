@@ -2,9 +2,9 @@
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import Tag from 'primevue/tag'
-import CustomButton from '@/components/CustomButton.vue'
 import moment from 'moment'
 import PageTitle from '@/components/PageTitle.vue'
+import Button from 'primevue/button'
 
 const props = defineProps({
   orders: Object
@@ -48,18 +48,18 @@ const emit = defineEmits(['remove', 'edit', 'status'])
       <Column header="Действие" class="w-2/5">
         <template #body="slotProps">
           <div class="flex flex-wrap gap-2">
-            <CustomButton
+            <Button
               label="Удалить"
               severity="danger"
               @click="emit('remove', slotProps.data)"
               size="small"
             />
-            <CustomButton
+            <Button
               label="Редактировать"
               @click="emit('edit', slotProps.data)"
               size="small"
             />
-            <CustomButton
+            <Button
               :label="slotProps.data.labelStatusBtn"
               v-if="slotProps.data.status != 'done'"
               :severity="slotProps.data.severityTag"
@@ -80,5 +80,15 @@ const emit = defineEmits(['remove', 'edit', 'status'])
         </template>
       </Column>
     </DataTable>
+
+    <div v-if="orders?.length === 0" class="mt-3 flex justify-center">
+      <div class="p-4 bg-gray-100 text-center rounded-md">
+        <div>Список заказов пуст!</div>
+        <div>
+          <router-link to="/orders/add" class="text-blue-600 underline">Создайте</router-link>
+          свой первый заказ.
+        </div>
+      </div>
+    </div>
   </div>
 </template>

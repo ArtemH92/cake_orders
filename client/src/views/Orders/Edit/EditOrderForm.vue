@@ -5,7 +5,7 @@ import { useForm } from 'vee-validate'
 import { schemaEditOrder } from '@/models/schemas'
 import CustomInputNumber from '@/components/FormFields/CustomInputNumber.vue'
 import CustomSelect from '@/components/FormFields/CustomSelect.vue'
-import CustomButton from '@/components/CustomButton.vue'
+import Button from 'primevue/button'
 import CustomDatePicker from '@/components/FormFields/CustomDatePicker.vue'
 import CustomTextarea from '@/components/FormFields/CustomTextarea.vue'
 
@@ -123,10 +123,10 @@ date.value.setDate(date.value.getDate() + 3)
     <CustomTextarea v-model="formData.notes" class="mt-6" label="Примечания" :disabled="disabled" />
 
     <div class="mt-6 flex justify-center">
-      <CustomButton label="Редактировать" v-if="disabled" @click="disabled = false" />
+      <Button label="Редактировать" v-if="disabled" @click="disabled = false" />
       <div v-else class="w-full flex justify-between">
-        <CustomButton label="Сохранить" type="submit" />
-        <CustomButton label="Отмена" type="reset" />
+        <Button label="Сохранить" type="submit" />
+        <Button label="Отмена" type="reset" />
       </div>
     </div>
   </form>

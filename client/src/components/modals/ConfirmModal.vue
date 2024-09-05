@@ -1,6 +1,6 @@
 <script setup>
 import Dialog from 'primevue/dialog';
-import CustomButton from '../CustomButton.vue';
+import Button from 'primevue/button';
 
 const emit = defineEmits(['cancel', 'confirm'])
 const model = defineModel()
@@ -9,8 +9,8 @@ const model = defineModel()
 <template>
   <Dialog v-model:visible="model" modal header="Вы уверены?" :closable="false">
     <div class="flex justify-evenly">
-      <CustomButton severity="danger" label="Да" @click="emit('confirm')" />
-      <CustomButton label="Нет" @click="emit('cancel')" />
+      <Button label="Да" severity="danger" @click="emit('confirm')" />
+      <Button label="Нет" @click="emit('cancel')" />
     </div>
   </Dialog>
 </template>

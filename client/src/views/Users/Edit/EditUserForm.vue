@@ -3,7 +3,7 @@ import { reactive, ref } from 'vue';
 import { EditUserData } from '@/models/users';
 import FloatLabel from 'primevue/floatlabel';
 import InputText from 'primevue/inputtext';
-import CustomButton from '@/components/CustomButton.vue';
+import Button from 'primevue/button';
 import { vMaska } from 'maska'
 
 const emit = defineEmits(['finish', 'cancel'])
@@ -43,10 +43,10 @@ const cancelEdit = () => {
       </FloatLabel> 
 
       <div class="mt-6 flex justify-center">
-        <CustomButton label="Редактировать" @click="disabled = false" v-if="disabled" />
+        <Button label="Редактировать" @click="disabled = false" v-if="disabled" />
         <div v-else class="flex justify-between w-full">
-          <CustomButton label="Сохранить" type="submit" />
-          <CustomButton label="Отмена" @click="cancelEdit()" />
+          <Button label="Сохранить" type="submit" />
+          <Button label="Отмена" @click="cancelEdit()" />
         </div>
       </div>
     </form>

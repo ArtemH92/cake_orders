@@ -29,10 +29,7 @@ const add = async (req, res) => {
     }
 
     const order = await prisma.order.create({
-      data: {
-        ...data,
-        createdById: req.user.id,
-      },
+      data
     });
 
     return res.status(201).json(order);

@@ -1,5 +1,5 @@
 <script setup>
-import CustomButton from '@/components/CustomButton.vue'
+import Button from 'primevue/button'
 import FloatLabel from 'primevue/floatlabel'
 import InputText from 'primevue/inputtext'
 import Password from 'primevue/password'
@@ -53,7 +53,7 @@ const hendler = handleSubmit((data) => {
     </small>
 
     <div class="flex justify-center mt-6">
-      <CustomButton :label="'Войти'" :type="'submit'" icon="pi pi-sign-in" icon-pos="right" />
+      <Button label="Войти" type="submit" icon="pi pi-sign-in" icon-pos="right" />
     </div>
   </form>
 </template>

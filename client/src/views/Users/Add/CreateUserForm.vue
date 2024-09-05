@@ -3,7 +3,7 @@ import { reactive } from 'vue';
 import { schemaUser } from '@/models/schemas'
 import { useForm } from 'vee-validate'
 import Checkbox from 'primevue/checkbox';
-import CustomButton from '@/components/CustomButton.vue';
+import Button from 'primevue/button';
 import CustomInputText from '@/components/FormFields/CustomInputText.vue'
 import CustomInputPassword from '@/components/FormFields/CustomInputPassword.vue'
 import CustomInputMask from '@/components/FormFields/CustomInputMask.vue'
@@ -64,7 +64,7 @@ const finish = handleSubmit((data) => {
       </div>
 
       <div class="mt-6 flex justify-center">
-        <CustomButton label="Создать" type="submit" />
+        <Button label="Создать" type="submit" />
       </div>
     </form>
   </div>
