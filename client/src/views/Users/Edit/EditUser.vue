@@ -14,23 +14,33 @@ const { user, editUser, getUser } = useAuthStore()
 const modalHandler = () => {
   modalVisible.value = true
 }
+
+const success = (admin) => {
+  admin ? router.push('/users/list') : router.push('/orders/list')
+}
 </script>
 
 <template>
   <div>
     <PageTitle
-      url="/users/list"
-      btn-label="Вернуться к списку пользователей"
+      :url="user.administrator ? '/users/list' : '/orders/list'"
+      :btn-label="
+        user.administrator ? 'Вернуться к списку пользователей' : 'Вернуться к списку заказов'
+      "
       title="Редактирование пользователя"
     />
     <div class="flex justify-center mt-5">
       <div class="bg-white rounded-md p-7">
-        <EditUserForm :data="user" @finish="(data) => editUser(data.id, data, modalHandler)" @cancel="getUser()" />
+        <EditUserForm
+          :data="user"
+          @finish="(data) => editUser(data.id, data, modalHandler)"
+          @cancel="getUser()"
+        />
       </div>
     </div>
     <SuccessModal
       v-model="modalVisible"
-      @confirm="router.push('/users/list')"
+      @confirm="success(user.administrator)"
       operation="Пользователь успешно отредактирован"
     />
   </div>

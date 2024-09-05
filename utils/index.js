@@ -23,7 +23,7 @@ function createDefaultUser() {
           data: {
             username: process.env.SUPER_USER_NAME,
             password: hashedPassword,
-            administrator: process.env.SUPER_USER,
+            administrator: true,
           },
         });
         console.log('Default user created successfully');

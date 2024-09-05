@@ -3,12 +3,9 @@ import DataTable from 'primevue/datatable';
 import PageTitle from '@/components/PageTitle.vue';
 import Column from 'primevue/column';
 import GoogleIcon from '@/components/GoogleIcon.vue';
-import Button from 'primevue/button';
-
 const props = defineProps({
   users: Object
 })
-const emit = defineEmits(['deleteUser'])
 </script>
 
 <template>
@@ -40,17 +37,6 @@ const emit = defineEmits(['deleteUser'])
         <template #body="slotProps">
           <GoogleIcon icon="done" v-if="slotProps.data.administrator" color="text-green-600" />
           <GoogleIcon icon="cancel_presentation" v-else color="text-red-600" />
-        </template>
-      </Column>
-
-      <Column header="Действия" class="w-1/4">
-        <template #body="slotProps">
-          <Button 
-            @click="emit('deleteUser', slotProps.data.id)"
-            severity="danger"
-            v-show="!slotProps.data.administrator"
-            label="Удалить пользователя" 
-          />
         </template>
       </Column>
 
