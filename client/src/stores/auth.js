@@ -19,13 +19,18 @@ export const useAuthStore = defineStore('auth', () => {
     await api
       .post('/users/login', userData)
       .then((response) => {
-        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('token', response.data.token)
         Object.assign(user, response.data)
         token.value = response.data.token
         router.push('/')
       })
-      .catch((err) => { 
-        toast.add({ severity: 'error', summary: 'Ошибка!', detail: err.response.data.message, life: 3000 })
+      .catch((err) => {
+        toast.add({
+          severity: 'error',
+          summary: 'Ошибка!',
+          detail: err.response.data.message,
+          life: 3000
+        })
       })
   }
 
@@ -47,7 +52,8 @@ export const useAuthStore = defineStore('auth', () => {
       })
       .catch((err) => {
         error.value = err.message
-      }).finally(() => loader.value = false)
+      })
+      .finally(() => (loader.value = false))
   }
 
   const getUsers = async () => {
@@ -56,7 +62,7 @@ export const useAuthStore = defineStore('auth', () => {
       .then((response) => {
         Object.assign(users, response.data)
       })
-      .catch((err) => error.value = err.message)
+      .catch((err) => (error.value = err.message))
   }
 
   const editUser = async (id, data, successModal) => {
@@ -72,22 +78,26 @@ export const useAuthStore = defineStore('auth', () => {
       })
   }
 
-  const removeUser = async (id) => {
-    await api
-      .post(`/users/remove/${id}`)
-      .then(() => console.log('Пользователь успешно удален'))
-      .catch((err) => console.log(err.response.data.message))
-  }
-
   const logout = () => {
     localStorage.removeItem('token')
-    Object.keys(user).forEach(key => delete user[key])
+    Object.keys(user).forEach((key) => delete user[key])
     token.value = null
     router.push('/login')
-    console.log('Вы вышли из системы')
   }
 
   const loading = computed(() => loader)
 
-  return { user, users, token, error, loading, login, register, getUser, getUsers, editUser, removeUser, logout }
+  return {
+    user,
+    users,
+    token,
+    error,
+    loading,
+    login,
+    register,
+    getUser,
+    getUsers,
+    editUser,
+    logout
+  }
 })

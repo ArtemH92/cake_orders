@@ -155,27 +155,6 @@ const editUser = async (req, res) => {
 };
 
 /**
- * @route POST /api/user/remove/:id
- * @desc Удаление пользователя
- * @access Private
- */
-const removeUser = async (req, res) => {
-  const { id }  = req.user;
-  
-  try {
-    await prisma.user.delete({
-      where: {
-        id: id,
-      },
-    });
-
-    res.status(204).json("OK");
-  } catch(err) {
-    res.status(500).json({ message: "Не удалось удалить пользователя" + err});
-  }
-};
-
-/**
  * 
  * @route GET /api/user/current
  * @desc Текущий пользователь
@@ -189,7 +168,6 @@ const current = async (req, res) => {
 module.exports = {
   login,
   register,
-  removeUser,
   current,
   getUser,
   getUsers,
