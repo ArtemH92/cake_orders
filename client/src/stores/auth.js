@@ -59,6 +59,7 @@ export const useAuthStore = defineStore('auth', () => {
     await api
       .get('/users/')
       .then((response) => {
+        users.splice(0, users.length, ...response.data.map(el => new EditGetUserData(el)))
         Object.assign(users, response.data)
       })
       .catch((err) => (error.value = err.message))
@@ -84,6 +85,20 @@ export const useAuthStore = defineStore('auth', () => {
     router.push('/login')
   }
 
+  const removeUser = async(id) => {
+    try {
+      await api.delete(`/users/${id}`, id)
+      await getUsers()
+    } catch(err) {
+      toast.add({
+        severity: 'error',
+        summary: 'Ошибка!',
+        detail: err.response.data.message,
+        life: 3000
+      })
+    }
+  }
+
   return {
     user,
     users,
@@ -95,6 +110,7 @@ export const useAuthStore = defineStore('auth', () => {
     getUser,
     getUsers,
     editUser,
-    logout
+    logout,
+    removeUser
   }
 })

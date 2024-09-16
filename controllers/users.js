@@ -48,7 +48,7 @@ const login = async (req, res) => {
 
 const register = async (req, res, next) => {
   try {
-    const { username, password, phone } = req.body;
+    const { username, password, phone, administrator } = req.body;
     
     if(!username || !password) {
       return res.status(400).json({message: 'Заполните обязателые поля'})
@@ -71,7 +71,8 @@ const register = async (req, res, next) => {
       data: {
         username,
         password: hashedPassord,
-        phone
+        phone,
+        administrator
       }
     });
   
@@ -166,11 +167,44 @@ const current = async (req, res) => {
   return res.status(200).json(req.user)
 };
 
+/**
+ * @route DELETE /api/users/current/:id
+ * @desc Удалить пользователя
+ * @access Private
+ */
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+  console.log(id)
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "Пользователь не найден" });
+    }
+
+    await prisma.user.delete({
+      where: {
+        id,
+      },
+    });
+
+    res.status(204).json({ message: "Пользователь успешно удален" });
+  } catch (error) {
+    res.status(500).json({ message: "Ошибка при удалении пользователя" });
+  }
+};
+
 module.exports = {
   login,
   register,
   current,
   getUser,
   getUsers,
-  editUser
+  editUser,
+  deleteUser
 };

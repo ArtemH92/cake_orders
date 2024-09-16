@@ -7,8 +7,6 @@ import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import StubTable from './StubTable.vue';
 
-
-
 const store = useOrderStore()
 const router = useRouter()
 store.getAll()
