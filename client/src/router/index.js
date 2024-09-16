@@ -11,11 +11,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: () => import('../views/Login/LoginPage.vue'),
-      meta: { layout: 'not-auth', auth: false }
+      meta: { layout: 'not-auth-layout'}
     },
     {
       path: '/orders',
-      meta: { layout: 'auth', auth: true },
+      meta: { layout: 'auth-layout'},
       children: [
         {
           path: 'list',
@@ -36,7 +36,7 @@ const router = createRouter({
     },
     {
       path: '/users',
-      meta: { layout: 'auth', auth: true },
+      meta: { layout: 'auth-layout' },
       children: [
         {
           path: 'list',
@@ -59,13 +59,18 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.auth && !localStorage.getItem('token')) {
-    next('/login')
-  } else if (!to.meta.auth && localStorage.getItem('token')) {
-    next('/')
+  const token = localStorage.getItem('token');
+
+  if (!token && to.name !== 'login') {
+    // Redirect to login if no token and not going to login page
+    next({ name: 'login' });
+  } else if (token && to.name === 'login') {
+    // Redirect to home if token exists and going to login page
+    next({ path: '/' });
   } else {
-    next()
+    // Proceed to the intended route
+    next();
   }
-})
+});
 
 export default router
