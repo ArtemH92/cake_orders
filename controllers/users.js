@@ -48,7 +48,7 @@ const login = async (req, res) => {
 
 const register = async (req, res, next) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, phone } = req.body;
     
     if(!username || !password) {
       return res.status(400).json({message: 'Заполните обязателые поля'})
@@ -70,7 +70,8 @@ const register = async (req, res, next) => {
     const user = await prisma.user.create({
       data: {
         username,
-        password: hashedPassord
+        password: hashedPassord,
+        phone
       }
     });
   
@@ -85,8 +86,8 @@ const register = async (req, res, next) => {
     } else {
       return res.status(400).json({ message: 'Не удалось создать пользователя' })
     }
-  } catch {
-    res.status(500).json({ message: 'Что-то пошло не так' })
+  } catch(err) {
+    res.status(500).json({ message: 'Что-то пошло не так' + err })
   }
 };
 
