@@ -9,7 +9,7 @@ import SuccessModal from '@/components/modals/SuccessModal.vue'
 const router = useRouter()
 const modalVisible = ref(false)
 
-const { user, editUser, getUser } = useAuthStore()
+const store = useAuthStore()
 
 const modalHandler = () => {
   modalVisible.value = true
@@ -23,24 +23,24 @@ const success = (admin) => {
 <template>
   <div>
     <PageTitle
-      :url="user.administrator ? '/users/list' : '/orders/list'"
+      :url="store.user.administrator ? '/users/list' : '/orders/list'"
       :btn-label="
-        user.administrator ? 'Вернуться к списку пользователей' : 'Вернуться к списку заказов'
+        store.user.administrator ? 'Вернуться к списку пользователей' : 'Вернуться к списку заказов'
       "
       title="Редактирование пользователя"
     />
     <div class="flex justify-center mt-5">
       <div class="bg-white rounded-md p-7">
         <EditUserForm
-          :data="user"
-          @finish="(data) => editUser(data.id, data, modalHandler)"
-          @cancel="getUser()"
+          :data="store.user"
+          @finish="(data) => store.editUser(data.id, data, modalHandler)"
+          @cancel="store.getUser()"
         />
       </div>
     </div>
     <SuccessModal
       v-model="modalVisible"
-      @confirm="success(user.administrator)"
+      @confirm="success(store.user.administrator)"
       operation="Пользователь успешно отредактирован"
     />
   </div>

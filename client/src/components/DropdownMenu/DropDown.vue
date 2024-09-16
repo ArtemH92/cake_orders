@@ -6,11 +6,11 @@ import Button from 'primevue/button'
 import ConfirmModal from '../modals/ConfirmModal.vue'
 import { useRouter } from 'vue-router'
 
-const { logout, user } = useAuthStore()
+const store = useAuthStore()
 const router = useRouter()
 
 const items = computed(() => [
-  ...(user.administrator
+  ...(store.user.administrator
     ? [
         {
           label: 'Список пользователей',
@@ -24,7 +24,7 @@ const items = computed(() => [
     : []),
   {
     label: 'Редактировать пользователя',
-    command: () => router.push(`/users/edit/${user.id}`)
+    command: () => router.push(`/users/edit/${store.user.id}`)
   },
   {
     label: 'Список заказов',
@@ -45,7 +45,7 @@ const toggle = (event) => {
 
 <template>
   <div class="flex items-center">
-    <span class="text-white pr-2">{{ user.username }}</span>
+    <span class="text-white pr-2">{{ store.user.username }}</span>
     <Button
       severity="help"
       type="button"
@@ -58,7 +58,7 @@ const toggle = (event) => {
     <Menu ref="menu" id="overlay_menu" :popup="true" :model="items"></Menu>
     <ConfirmModal
       v-model="confirmModalVisible"
-      @confirm="logout()"
+      @confirm="store.logout()"
       @cancel="confirmModalVisible = false"
     />
   </div>

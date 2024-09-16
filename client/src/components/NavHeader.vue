@@ -4,8 +4,8 @@ import { useAuthStore } from '@/stores/auth';
 import CurrentTime from './CurrentTime.vue';
 import DropDown from './DropdownMenu/DropDown.vue';
 
-const { getUser } = useAuthStore()
-onMounted(() => getUser())
+const store = useAuthStore()
+onMounted(() => store.getUser())
 </script>
 
 <template>

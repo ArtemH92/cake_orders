@@ -27,16 +27,6 @@ const cancelEdit = () => {
         <label>Имя пользователя</label>
       </FloatLabel> 
 
-      <!-- <FloatLabel class="mt-6">
-        <Password v-model="userData.password" :feedback="false" />
-        <label>Пароль</label>
-      </FloatLabel> 
-
-      <FloatLabel class="mt-6">
-        <Password v-model="userData.confirmPassword" :feedback="false" />
-        <label>Повторите пароль</label>
-      </FloatLabel>  -->
-
       <FloatLabel class="mt-6">
         <InputText v-model="userData.phone" v-maska data-maska="+375 (##) ### ## ##" :disabled="disabled" />
         <label>Номер телефона</label>

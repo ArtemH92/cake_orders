@@ -8,10 +8,10 @@ export const useOrderStore = defineStore('orders', () => {
   const orders = reactive([])
   const order = reactive({})
   const toast = useToast()
-  const loader = ref(false)
+  const loading = ref(false)
 
   const getAll = async () => {
-    loader.value = true;
+    loading.value = true;
     try {
       const response = await api.get('/orders/');
       if (response.data.length === 0) {
@@ -22,7 +22,7 @@ export const useOrderStore = defineStore('orders', () => {
     } catch (err) {
         toast.add({ severity: 'error', summary: 'Ошибка!', detail: err.message || err, life: 3000 });
     } finally {
-        loader.value = false;
+        loading.value = false;
     }
   }
 
@@ -58,18 +58,16 @@ export const useOrderStore = defineStore('orders', () => {
   }
 
   const getOrder = async (id) => {
-    loader.value = true;
+    loading.value = true;
     try {
       const response = await api.get(`/orders/${id}`)
       Object.assign(order, new SingleOrder(response.data))
     } catch (err) {
       toast.add({ severity: 'error', summary: 'Ошибка!', detail: err.message || err, life: 3000 })
     } finally {
-        loader.value = false;
+        loading.value = false;
     }
   }
-
-  const loading = computed(() => loader)
  
   return { orders, order, loading, getAll, addOrder, remove, editOrder, getOrder }
 })

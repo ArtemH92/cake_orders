@@ -10,7 +10,7 @@ import StubUsersList from '../List/StubUsersList.vue'
 const router = useRouter()
 const modalVisible = ref(false)
 
-const { register, user } = useAuthStore()
+const store = useAuthStore()
 
 const modalHandler = () => {
   modalVisible.value = true
@@ -19,7 +19,7 @@ const modalHandler = () => {
 
 <template>
   <div>
-    <div v-if="user.administrator">
+    <div v-if="store.user.administrator">
       <PageTitle
         url="/users/list"
         btn-label="Вернуться к списку пользователей"
@@ -27,7 +27,7 @@ const modalHandler = () => {
       />
       <div class="flex justify-center mt-5">
         <div class="bg-white rounded-md p-7">
-          <CreateUserForm @finish="(data) => register(data, modalHandler)" />
+          <CreateUserForm @finish="(data) => store.register(data, modalHandler)" />
         </div>
       </div>
       <SuccessModal

@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue'
 import api from '@/api'
 import { useRouter } from 'vue-router'
-import { computed } from 'vue'
 import { EditGetUserData } from '@/models/users'
 import { useToast } from 'primevue/usetoast'
 
@@ -12,7 +11,7 @@ export const useAuthStore = defineStore('auth', () => {
   const token = ref(null)
   const error = ref(null)
   const router = useRouter()
-  const loader = ref(false)
+  const loading = ref(false)
   const toast = useToast()
 
   const login = async (userData) => {
@@ -44,7 +43,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const getUser = async () => {
-    loader.value = true
+    loading.value = true
     await api
       .get('/users/current')
       .then((response) => {
@@ -53,7 +52,7 @@ export const useAuthStore = defineStore('auth', () => {
       .catch((err) => {
         error.value = err.message
       })
-      .finally(() => (loader.value = false))
+      .finally(() => (loading.value = false))
   }
 
   const getUsers = async () => {
@@ -84,8 +83,6 @@ export const useAuthStore = defineStore('auth', () => {
     token.value = null
     router.push('/login')
   }
-
-  const loading = computed(() => loader)
 
   return {
     user,

@@ -7,11 +7,13 @@ import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import StubTable from './StubTable.vue';
 
-const { orders, loading, getAll, remove, editOrder } = useOrderStore()
-const router = useRouter()
 
+
+const store = useOrderStore()
+const router = useRouter()
+store.getAll()
 onMounted(() => {
-  getAll()
+  store.getAll()
 })
 
 const modalVisible = ref(false)
@@ -33,7 +35,7 @@ const confirmModalHandler = () => {
       id: order.id,
       status: order.status === 'inProcessing' ? 'inProgress' : order.status === 'inProgress' ? 'done' : ''
     }
-    editOrder(data.id, data)
+    store.editOrder(data.id, data)
   }
   modalVisible.value = false
 }
@@ -41,10 +43,10 @@ const confirmModalHandler = () => {
 
 <template>
   <div>
-    <StubTable v-if="loading" />
+    <StubTable v-if="store.loading" />
     <TableOrders
       v-else
-      :orders="orders"
+      :orders="store.orders"
       @remove="(data) => modalHandler('remove', data)"
       @edit="(data) => router.push(`/orders/edit/${data.id}`)"
       @status="(data) => modalHandler('status', data)"

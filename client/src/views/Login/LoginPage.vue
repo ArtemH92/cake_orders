@@ -4,10 +4,10 @@ import LoginFrom from './LoginFrom.vue';
 import { useAuthStore } from '@/stores/auth';
 import Toast from 'primevue/toast';
 
-const { login } = useAuthStore()
+const store = useAuthStore()
 
 const hendleSubmit = (data) => {
-  login(data)
+  store.login(data)
 }
 </script>
 

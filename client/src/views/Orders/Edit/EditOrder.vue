@@ -8,9 +8,9 @@ import SuccessModal from '@/components/modals/SuccessModal.vue'
 import Toast from 'primevue/toast'
 import ProgressSpinner from 'primevue/progressspinner'
 
-onMounted(() => getOrder(route.params.id))
-const { order, getOrder, editOrder, loading } = useOrderStore()
-
+onMounted(() => store.getOrder(route.params.id))
+// const { order, getOrder, editOrder, loading } = useOrderStore()
+const store = useOrderStore()
 const router = useRouter()
 const route = useRoute()
 
@@ -29,12 +29,12 @@ const modalHandler = () => {
     />
     <div class="flex justify-center mt-5">
       <div class="bg-white rounded-md p-7">
-        <ProgressSpinner v-if="loading" />
+        <ProgressSpinner v-if="store.loading" />
         <EditOrderForm
           v-else
-          :data="order"
-          @finish="(data) => editOrder(data.id, data, modalHandler)"
-          @cancel="getOrder(route.params.id)"
+          :data="store.order"
+          @finish="(data) => store.editOrder(data.id, data, modalHandler)"
+          @cancel="store.getOrder(route.params.id)"
         />
       </div>
     </div>
