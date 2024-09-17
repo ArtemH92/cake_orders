@@ -6,6 +6,7 @@ import CreateOrderForm from './CreateOrderForm.vue';
 import Toast from 'primevue/toast';
 import { useRouter } from 'vue-router';
 import SuccessModal from '@/components/modals/SuccessModal.vue';
+import UploaderFile from '@/components/UploaderFile.vue';
 
 const router = useRouter()
 const modalVisible = ref(false)
@@ -13,12 +14,13 @@ const store = useOrderStore()
 const modalHandler = () => {
   modalVisible.value = true
 }
+
 </script>
 
 <template>
   <div>
     <PageTitle url="/orders/list" btn-label="Вернуться к списку заказов" title="Создание заказа" />
-    <div class="flex justify-center mt-5">
+    <div class="flex justify-center mt-5 flex-col items-center">
       <div class="bg-white rounded-md p-7">
         <CreateOrderForm @finish="(data) => store.addOrder(data, modalHandler)"/>
       </div>
