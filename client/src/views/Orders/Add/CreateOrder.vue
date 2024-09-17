@@ -6,7 +6,6 @@ import CreateOrderForm from './CreateOrderForm.vue';
 import Toast from 'primevue/toast';
 import { useRouter } from 'vue-router';
 import SuccessModal from '@/components/modals/SuccessModal.vue';
-import UploaderFile from '@/components/UploaderFile.vue';
 
 const router = useRouter()
 const modalVisible = ref(false)
