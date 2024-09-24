@@ -9,7 +9,6 @@ import Toast from 'primevue/toast'
 import ProgressSpinner from 'primevue/progressspinner'
 
 onMounted(() => store.getOrder(route.params.id))
-// const { order, getOrder, editOrder, loading } = useOrderStore()
 const store = useOrderStore()
 const router = useRouter()
 const route = useRoute()
